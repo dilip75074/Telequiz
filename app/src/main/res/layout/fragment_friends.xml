@@ -4,21 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FriendsFragment">
-
     <ListView
-        android:id="@+id/contact_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:id="@+id/friend_data_list"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:footerDividersEnabled="true"
+        android:layout_marginBottom="?attr/actionBarSize">
     </ListView>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/friend_name"
-        android:scrollbars="vertical"/>
-</ScrollView>
 </FrameLayout>
