@@ -1,4 +1,4 @@
-package com.example.telequiz;
+package com.example.telequiz.main_screen_tabs;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

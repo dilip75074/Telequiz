@@ -1,4 +1,4 @@
-package com.example.telequiz;
+package com.example.telequiz.main_screen_tabs;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.telequiz.R;
 
 import java.util.ArrayList;
 import java.util.List;
