@@ -34,6 +34,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+    }
+
     private void initAllViews() {
         _emailText = findViewById(R.id.input_email);
         _passwordText = findViewById(R.id.input_password);

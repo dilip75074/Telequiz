@@ -31,8 +31,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+    }
+
     private void initAllViews() {
         _emailText = findViewById(R.id.input_email);
         _passwordRecoverButton = findViewById(R.id.btn_password_recover);

@@ -22,11 +22,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--Login Activity-->
         <activity
             android:name=".activities.account.LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activities.account.SignUpActivity" />
-        <activity android:name=".activities.account.ForgotPasswordActivity"></activity>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.MainActivity"/>
+
+        <!--SignUp Activity-->
+        <activity android:name=".activities.account.SignUpActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.account.LoginActivity"/>
+
+        <!--Forgot Password Activity-->
+        <activity android:name=".activities.account.ForgotPasswordActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.account.LoginActivity" />
     </application>
 
 </manifest>
