@@ -1,12 +1,9 @@
 package com.example.telequiz.activities.account;
 
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,26 +12,48 @@ import android.widget.Toast;
 
 import com.example.telequiz.R;
 import com.example.telequiz.activities.MainActivity;
+import com.example.telequiz.services.ConfigManager;
+import com.example.telequiz.services.SessionManager;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Context context;
+    ConfigManager config;
+    SessionManager session;
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    TextView _signupLink, _forgotPasswordLink;
-    EditText _emailText, _passwordText;
-    Button _loginButton;
+    TextView signupLink, forgotPasswordLink;
+    EditText emailText, passwordText;
+    Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Login");
         setContentView(R.layout.activity_login);
+        context = getApplicationContext();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initAllViews();
+        config = new ConfigManager();
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        initAllComponents();
+
+        // Session class instance
+        session = new SessionManager(context);
+        HashMap<String, String> user = session.getUserDetails();
+        if(session.isLoggedIn()) {
+            emailText.setText(user.get(SessionManager.KEY_EMAIL));
+            emailText.setSelection(emailText.length());
+            passwordText.requestFocus();
+        }
+        else {
+            Toast.makeText(context, "Not Logged In", Toast.LENGTH_SHORT).show();
+        }
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -42,20 +61,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+        signupLink.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                Intent intent = new Intent(context, SignUpActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
 
-        _forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+                Intent intent = new Intent(context, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
@@ -63,56 +82,46 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
     }
 
     public void login() {
-        Log.d(TAG, "Login");
 
-        if (!validate()) {
-            onLoginFailed();
-            return;
+        if(isValidEmail() && isValidPassword()) {
+            remoteAuthenticate();
         }
-
-        _loginButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_AppDarkDialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        else {
+            onLoginFailed();
+        }
     }
 
-    public boolean validate() {
-        boolean isValid = false;
-        if(isValidEmail() && isValidPassword())
-            isValid = true;
-        else
-            isValid = false;
-        return isValid;
+    public void remoteAuthenticate() {
+            /***
+             * Make a http post request tp Check if user exist in our database or not.
+             */
+
+            loginButton.setEnabled(false);
+            final String email = emailText.getText().toString();
+            final String password = passwordText.getText().toString();
+            int http_status_code;
+
+            http_status_code = 200;
+
+            if(http_status_code == config.getHttpStatusCode("SUCCESS")) {
+                onLoginSuccess("Dilip Kumar");
+            }
+            else  {
+                onLoginFailed();
+            }
     }
 
     public boolean isValidEmail() {
-        String email = _emailText.getText().toString();
+        String email = emailText.getText().toString();
         boolean isValid = true;
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("Enter a valid email address");
+            emailText.setError("Enter a valid email address");
             isValid = false;
         } else {
             isValid = true;
@@ -122,31 +131,38 @@ public class LoginActivity extends AppCompatActivity {
 
     public boolean isValidPassword() {
         boolean isValid = false;
-        String password = _passwordText.getText().toString();
-        if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
-            _passwordText.setError("Enter a valid password");
+        String password = passwordText.getText().toString();
+        if (password.isEmpty() || password.length() < 6 || password.length() > 20) {
+            passwordText.setError("Enter a valid password");
             isValid = false;
         } else {
-            isValid = false;
+            isValid = true;
         }
         return isValid;
     }
 
-    public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
+    public void onLoginSuccess(String userName) {
+        String email = emailText.getText().toString();
+        loginButton.setEnabled(true);
+        SessionManager session = new SessionManager(context);
+        session.createLoginSession(userName, email);
+//        Toast.makeText(getBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
+        Toast.makeText(context, "Successfully Logged in", Toast.LENGTH_SHORT).show();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_SHORT).show();
+        loginButton.setEnabled(true);
     }
 
-    private void initAllViews() {
-        _emailText = findViewById(R.id.input_email);
-        _passwordText = findViewById(R.id.input_password);
-        _loginButton = findViewById(R.id.btn_login);
-        _signupLink = findViewById(R.id.link_signup);
-        _forgotPasswordLink = findViewById(R.id.link_forgot_password);
+    private void initAllComponents() {
+        emailText = findViewById(R.id.input_email);
+        passwordText = findViewById(R.id.input_password);
+        loginButton = findViewById(R.id.btn_login);
+        signupLink = findViewById(R.id.link_signup);
+        forgotPasswordLink = findViewById(R.id.link_forgot_password);
     }
 }

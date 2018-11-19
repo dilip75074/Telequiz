@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="30dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <ImageView
                     android:layout_width="100dp"
@@ -160,6 +160,31 @@
                         android:inputType="number" />
                 </LinearLayout>
 
+                <!--Confirm Password Label -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="10dp">
+                    <CheckBox
+                        android:id="@+id/term_of_service_check_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I agree to the"
+                        android:checked="true"/>
+
+                    <TextView
+                        android:id="@+id/term_of_service"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint=" term of service"
+                        android:inputType="text"
+                        android:textColor="@color/colorAccent"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                </LinearLayout>
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_signup"
                     android:layout_width="fill_parent"
