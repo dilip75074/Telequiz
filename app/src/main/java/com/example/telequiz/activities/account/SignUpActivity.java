@@ -9,13 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -28,7 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_account_sign_up);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Sign Up");
         context = getApplicationContext();

@@ -1,19 +1,14 @@
-package com.example.telequiz.main_screen_tabs;
+package com.example.telequiz.activities.home.fragments;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.telequiz.R;
 
@@ -44,11 +39,11 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_friends, container, false);
+        rootView = inflater.inflate(R.layout.activity_home_fragment_friends, container, false);
         contactCursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
         getContacts();
 
-        ArrayAdapter adapter  = new ArrayAdapter<String>(getActivity(), R.layout.friend_list, R.id.title, friendsName);
+        ArrayAdapter adapter  = new ArrayAdapter<String>(getActivity(), R.layout.activity_home_fragment_friends_friend_list, R.id.title, friendsName);
 
         ListView listView = (ListView) rootView.findViewById(R.id.friend_data_list);
         listView.setAdapter(adapter);

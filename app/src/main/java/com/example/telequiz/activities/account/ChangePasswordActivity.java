@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
-import com.example.telequiz.activities.MainActivity;
+import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.ConfigManager;
 
 public class ChangePasswordActivity extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_account_change_password);
         context = getApplicationContext();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Change Password");

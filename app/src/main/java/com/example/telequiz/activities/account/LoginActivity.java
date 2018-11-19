@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.telequiz.R;
-import com.example.telequiz.activities.MainActivity;
+import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.ConfigManager;
 import com.example.telequiz.services.SessionManager;
 
@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Login");
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_account_login);
         context = getApplicationContext();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -139,14 +139,14 @@ public class LoginActivity extends AppCompatActivity {
             isValid = true;
         }
         return isValid;
-    }
-
-    public void onLoginSuccess(String userName) {
-        String email = emailText.getText().toString();
-        loginButton.setEnabled(true);
+    }(true);
         SessionManager session = new SessionManager(context);
         session.createLoginSession(userName, email);
-//        Toast.makeText(getBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ge
+//
+//    public void onLoginSuccess(String userName) {
+//        String email = emailText.getText().toString();
+//        loginButton.setEnabledtBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.widget.Toast;
 
-import com.example.telequiz.activities.MainActivity;
+import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.activities.account.LoginActivity;
 
 import java.util.HashMap;

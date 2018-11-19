@@ -1,4 +1,4 @@
-package com.example.telequiz.activities;
+package com.example.telequiz.activities.home;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.telequiz.activities.account.ChangePasswordActivity;
 import com.example.telequiz.activities.account.LoginActivity;
-import com.example.telequiz.main_screen_tabs.MainPagerAdapter;
+import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
 import com.example.telequiz.services.SessionManager;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home_main);
         context = getApplicationContext();
 
         // Setup handler for uncaught exceptions.
