@@ -3,6 +3,8 @@
     package="com.example.telequiz">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -23,29 +25,48 @@
             </intent-filter>
         </activity>
 
-        <!-- Login Activity -->
+        <!-- Account:- Login Activity -->
         <activity
             android:name=".activities.account.LoginActivity"
             android:parentActivityName=".activities.home.MainActivity"
             android:screenOrientation="portrait" />
 
-        <!-- SignUp Activity -->
+        <!-- Account:- SignUp Activity -->
         <activity
             android:name=".activities.account.SignUpActivity"
             android:parentActivityName=".activities.account.LoginActivity"
             android:screenOrientation="portrait" />
 
-        <!-- Forgot Password Activity -->
+        <!-- Account:- Forgot Password Activity -->
         <activity
             android:name=".activities.account.ForgotPasswordActivity"
             android:parentActivityName=".activities.account.LoginActivity"
             android:screenOrientation="portrait" />
 
-        <!--Change Password Activity-->
+        <!-- Account:- Change Password Activity -->
         <activity
             android:name=".activities.account.ChangePasswordActivity"
             android:parentActivityName=".activities.home.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+
+        <!--CreatorStudio:- Dashboard Activity-->
+        <activity
+            android:name=".activities.creatorStudio.DashboardActivity"
+            android:parentActivityName=".activities.home.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <!--CreatorStudio:- Upload Question Activity-->
+        <activity
+            android:name=".activities.creatorStudio.UploadQuestionActivity"
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
+            android:screenOrientation="portrait" />
+
+        <!--CreatorStudio:- Full analytics Activity-->
+        <activity
+            android:name=".activities.creatorStudio.FullAnalyticsActivity"
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

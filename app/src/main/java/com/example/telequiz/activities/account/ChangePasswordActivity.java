@@ -75,7 +75,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return false;
         }
         else if(oldPassword.length() < 6) {
-            newPasswordText.setError("Password must be at least 6 characters");
+            oldPasswordText.setError("Password must be at least 6 characters");
             return false;
         }
         else {

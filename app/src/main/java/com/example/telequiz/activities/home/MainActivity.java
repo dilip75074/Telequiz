@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.telequiz.activities.account.ChangePasswordActivity;
 import com.example.telequiz.activities.account.LoginActivity;
+import com.example.telequiz.activities.creatorStudio.DashboardActivity;
 import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
 import com.example.telequiz.services.SessionManager;
@@ -151,13 +152,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_share) {
+        if (id == R.id.nav_dashboard) {
+            Intent intent = new Intent(context, DashboardActivity.class);
+            startActivity(intent);
+        }
 
-        }  else if (id == R.id.nav_change_password) {
+        else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(context, ChangePasswordActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_user_logout) {
+        }
+
+        else if (id == R.id.nav_user_logout) {
             // User logout action
 
             new AlertDialog.Builder(this)

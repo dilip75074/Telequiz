@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.account.LoginActivity">
+    tools:context=".activities.creatorStudio.UploadQuestionActivity">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -11,7 +12,7 @@
         android:fitsSystemWindows="true">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -24,10 +25,10 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingTop="30dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <ImageView
                     android:layout_width="100dp"
@@ -37,7 +38,10 @@
                     android:elevation="10dp"
                     android:src="@drawable/user_login_avtar" />
 
-
+                <!--*********************************************-->
+                <!--Upload quesion - Method: in bulk -->
+                <!--*********************************************-->
+                <!--Enter Google spreadsheet id-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -49,16 +53,15 @@
                         android:layout_centerVertical="true"
                         android:layout_gravity="left"
                         android:background="@drawable/icon_email" />
-                    <EditText android:id="@+id/input_email"
+                    <EditText android:id="@+id/input_google_spreadsheet_id"
                         android:layout_width="match_parent"
                         android:layout_gravity="right"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:hint="Email" />
-
+                        android:inputType="text"
+                        android:hint="Google Spreadsheed Id" />
                 </LinearLayout>
 
-                <!-- Password Label -->
+                <!-- Enter Google worksheet name -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -71,40 +74,40 @@
                         android:background="@drawable/icon_password" />
 
                     <EditText
-                        android:id="@+id/input_password"
+                        android:id="@+id/input_google_worksheet_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Password"
-                        android:inputType="textPassword" />
+                        android:hint="Google Worksheet Name"
+                        android:inputType="text" />
                 </LinearLayout>
 
+                <!--Choose the default or custom worksheet name-->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
-                    <CheckBox android:id="@+id/check_box_remeber_me"
-                        android:layout_width="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal">
+                    <RadioGroup
+                        android:id="@+id/google_sheet_name_radio_group"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Remember Me"
-                        android:layout_gravity="left"
-                        android:textSize="16dip"
-                        android:checked="true"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"/>
-
-                    <TextView android:id="@+id/link_forgot_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Forgot Password"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="20dp"
-                        android:textSize="16dip"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"/>
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/google_sheet_name_default_radio_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Default Name" />
+                        <RadioButton
+                            android:id="@+id/google_sheet_name_custom_radio_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Custom Name"
+                            android:checked="true"/>
+                    </RadioGroup>
                 </LinearLayout>
 
-
+                <!--Question upload button-->
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_login"
                     android:layout_width="fill_parent"
@@ -113,25 +116,45 @@
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/background_login_button"
                     android:padding="12dp"
-                    android:text="Log in"
+                    android:text="Load Questions"
                     android:textColor="@android:color/background_light"
                     android:textSize="20sp"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground" />
 
-                <TextView android:id="@+id/link_signup"
+                <!--Important note to make sure if the user has already granted the public access-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Important Note: Make sure that you have already
+granted this Google Spreadsheet permission for public access."
+                        android:textSize="16dip"
+                        android:gravity="left"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+
+                <!--Know more about the google sheet read/permission -->
+                <TextView
+                    android:id="@+id/link_know_more"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:text="No account yet? Create one"
-                    android:gravity="center"
-                    android:textSize="16dip"
+                    android:autoLink="web"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:textColor="@color/colorAccent"/>
+                    android:gravity="center"
+                    android:linksClickable="true"
+                    android:text="Know More"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16dip" />
             </LinearLayout>
-
         </RelativeLayout>
-
     </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

@@ -139,14 +139,14 @@ public class LoginActivity extends AppCompatActivity {
             isValid = true;
         }
         return isValid;
-    }(true);
+    }
+
+    public void onLoginSuccess(String userName) {
+        String email = emailText.getText().toString();
+        loginButton.setEnabled(true);
         SessionManager session = new SessionManager(context);
         session.createLoginSession(userName, email);
-//        Toast.makeText(ge
-//
-//    public void onLoginSuccess(String userName) {
-//        String email = emailText.getText().toString();
-//        loginButton.setEnabledtBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

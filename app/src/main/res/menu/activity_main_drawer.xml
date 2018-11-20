@@ -5,7 +5,8 @@
 
     <group
         android:id="@+id/nav_logged_out_items"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:visible="false">
         <item
             android:id="@+id/nav_play_quiz"
             android:icon="@drawable/icon_play"
@@ -23,12 +24,11 @@
     <group
         android:id="@+id/nav_logged_in_items"
         android:checkableBehavior="single"
-        android:visible="false"
-        tools:visible="false">
+        android:visible="true">
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/icon_dashboard"
-            android:title="Dashboard" />
+            android:title="Creaor Studio" />
         <item
             android:id="@+id/nav_my_account"
             android:icon="@drawable/icon_profile"
@@ -53,6 +53,11 @@
                 android:id="@+id/nav_support"
                 android:icon="@drawable/icon_customer_support"
                 android:title="Help Desk" />
+
+            <item
+                android:id="@+id/nav_send_feedback"
+                android:icon="@drawable/icon_feedback"
+                android:title="Send Feedback" />
         </menu>
     </item>
 
