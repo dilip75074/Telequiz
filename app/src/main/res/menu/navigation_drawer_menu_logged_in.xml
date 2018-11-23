@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/nav_logged_in_items"
+        android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_play_quiz_logged_in"
+            android:icon="@drawable/icon_play"
+            android:title="Play Quiz" />
+        <item
+            android:id="@+id/nav_creator_studio_looged_in"
+            android:icon="@drawable/icon_dashboard"
+            android:title="Creator Studio" />
+        <item
+            android:id="@+id/nav_my_account_looged_in"
+            android:icon="@drawable/icon_profile"
+            android:title="My Account" />
+        <item
+            android:id="@+id/nav_change_password_logged_in"
+            android:icon="@drawable/icon_change_password"
+            android:title="Change Password" />
+        <item
+            android:id="@+id/nav_user_logout_logged_in"
+            android:icon="@drawable/icon_logout"
+            android:title="Logout" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share_looged_in"
+                android:icon="@drawable/icon_invite_friends"
+                android:title="Invite Friends" />
+            <item
+                android:id="@+id/nav_support_looged_in"
+                android:icon="@drawable/icon_customer_support"
+                android:title="Help Desk" />
+
+            <item
+                android:id="@+id/nav_send_feedback_looged_in"
+                android:icon="@drawable/icon_feedback"
+                android:title="Send Feedback" />
+        </menu>
+    </item>
+
+</menu>

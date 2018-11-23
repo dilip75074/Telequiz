@@ -4,10 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.widget.Toast;
+import android.support.design.widget.NavigationView;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.activities.account.LoginActivity;
+import com.example.telequiz.services.utilities.Message;
 
 import java.util.HashMap;
 
@@ -58,6 +63,7 @@ public class SessionManager {
 
         // commit changes
         editor.commit();
+        Message.message(context, "Successfully Logged in");
     }
 
     /**
@@ -72,7 +78,6 @@ public class SessionManager {
             Intent i = new Intent(context, LoginActivity.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             // Add new Flag to start new Activity
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -114,7 +119,7 @@ public class SessionManager {
 
         // Staring Login Activity
         context.startActivity(i);
-        Toast.makeText(context, "Successfully Logged Out", Toast.LENGTH_LONG).show();
+        Message.message(context, "Successfully Logged Out");
     }
 
     /**
@@ -123,5 +128,30 @@ public class SessionManager {
     // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGGED_IN, false);
+    }
+
+    /**
+     *Set navigation drawer based on logged in user and guest user.
+     * */
+
+    public void setEssentialComponentsBasedOnSession(Context context, NavigationView navigationView) {
+        HashMap<String, String> userDetail;
+        View header = navigationView.getHeaderView(0);
+        TextView userNameText = (TextView) header.findViewById(R.id.nav_header_logged_in_user_name);
+        TextView userEmailText = (TextView) header.findViewById(R.id.nav_header_logged_in_user_email);
+        RelativeLayout logInButtonLayout = header.findViewById(R.id.nav_header_login_button_layout);
+
+        if(this.isLoggedIn()) {
+            userDetail = this.getUserDetails();
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_drawer_menu_logged_in);
+            logInButtonLayout.setVisibility(View.GONE);
+            userNameText.setText(userDetail.get(this.KEY_NAME));
+            userEmailText.setText(userDetail.get(this.KEY_EMAIL));
+        } else {
+            logInButtonLayout.setVisibility(View.VISIBLE);
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_drawer_menu_logged_out);
+        }
     }
 }

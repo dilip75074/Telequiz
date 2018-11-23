@@ -18,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.telequiz.activities.account.ChangePasswordActivity;
 import com.example.telequiz.activities.account.LoginActivity;
@@ -26,28 +25,24 @@ import com.example.telequiz.activities.creatorStudio.DashboardActivity;
 import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
 import com.example.telequiz.services.SessionManager;
-
-import java.util.HashMap;
+import com.example.telequiz.services.utilities.Message;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigationView;
     Menu menu;
     SessionManager session;
     Context context;
-
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private HashMap<String, String> userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_main);
-        context = getApplicationContext();
 
         // Setup handler for uncaught exceptions.
         Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
@@ -59,24 +54,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // Session class instance
-        session = new SessionManager(context);
-        userData = session.getUserDetails();
-
-        if(session.isLoggedIn()) {
-            Toast.makeText(context, "Logged In", Toast.LENGTH_SHORT).show();
-//            navHeaderLoggedInUserName.setText(userData.get(SessionManager.KEY_NAME));
-//            navHeaderLoggedInUserEmail.setText(userData.get(SessionManager.KEY_EMAIL));
-        }
-        else {
-            Toast.makeText(context, "Not Logged In", Toast.LENGTH_SHORT).show();
-        }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        mViewPager = (ViewPager) findViewById(R.id.mainViewPager);
-        mTabLayout = (TabLayout) findViewById(R.id.mainTabLayout); // get the reference of TabLayout
-
+        initAllComponents();
+        session.setEssentialComponentsBasedOnSession(context, navigationView);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -105,13 +84,6 @@ public class MainActivity extends AppCompatActivity
 
         // Session class instance
         session = new SessionManager(context);
-
-        if(session.isLoggedIn()) {
-            Toast.makeText(context, "Logged In", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(context, "Not Logged In", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
@@ -152,18 +124,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_dashboard) {
+        if (id == R.id.nav_creator_studio_looged_in) {
             Intent intent = new Intent(context, DashboardActivity.class);
             startActivity(intent);
         }
 
-        else if (id == R.id.nav_change_password) {
+        else if (id == R.id.nav_change_password_logged_in) {
             Intent intent = new Intent(context, ChangePasswordActivity.class);
             startActivity(intent);
 
         }
 
-        else if (id == R.id.nav_user_logout) {
+        else if (id == R.id.nav_user_logout_logged_in) {
             // User logout action
 
             new AlertDialog.Builder(this)
@@ -188,8 +160,7 @@ public class MainActivity extends AppCompatActivity
     public void handleUncaughtException (Thread thread, Throwable e)
     {
         e.printStackTrace(); // not all Android versions will print the stack trace automatically
-
-        Toast.makeText(this, "Fatal Error found !", Toast.LENGTH_LONG).show();
+        Message.message(context, "Fatal Error found !");
         System.exit(1); // kill off the crashed app
     }
 
@@ -197,5 +168,14 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    public void initAllComponents() {
+        context = getApplicationContext();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mViewPager = (ViewPager) findViewById(R.id.mainViewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.mainTabLayout); // get the reference of TabLayout
+        navigationView = findViewById(R.id.nav_view);
+        session = new SessionManager(context);
     }
 }

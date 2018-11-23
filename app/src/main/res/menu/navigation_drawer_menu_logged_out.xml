@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/nav_logged_out_items"
+        android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_play_quiz_logged_out"
+            android:icon="@drawable/icon_play"
+            android:title="Play Quiz"></item>
+        <item
+            android:id="@+id/nav_my_account_logged_out"
+            android:icon="@drawable/icon_profile"
+            android:title="My Account" />
+        <item
+            android:id="@+id/nav_creator_stuio_logged_out"
+            android:icon="@drawable/icon_dashboard"
+            android:title="Creator Studio" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share_logged_out"
+                android:icon="@drawable/icon_invite_friends"
+                android:title="Invite Friends" />
+            <item
+                android:id="@+id/nav_support_logged_out"
+                android:icon="@drawable/icon_customer_support"
+                android:title="Help Desk" />
+
+            <item
+                android:id="@+id/nav_send_feedback_logged_out"
+                android:icon="@drawable/icon_feedback"
+                android:title="Send Feedback" />
+        </menu>
+    </item>
+
+</menu>

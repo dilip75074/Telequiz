@@ -8,19 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
-import com.example.telequiz.services.ConfigManager;
+import com.example.telequiz.services.Constant;
 import com.example.telequiz.services.SessionManager;
-
-import java.util.HashMap;
+import com.example.telequiz.services.utilities.Message;
 
 public class LoginActivity extends AppCompatActivity {
 
     Context context;
-    ConfigManager config;
     SessionManager session;
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -36,22 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account_login);
         context = getApplicationContext();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        config = new ConfigManager();
-
         initAllComponents();
-
-        // Session class instance
-        session = new SessionManager(context);
-        HashMap<String, String> user = session.getUserDetails();
-        if(session.isLoggedIn()) {
-            emailText.setText(user.get(SessionManager.KEY_EMAIL));
-            emailText.setSelection(emailText.length());
-            passwordText.requestFocus();
-        }
-        else {
-            Toast.makeText(context, "Not Logged In", Toast.LENGTH_SHORT).show();
-        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -108,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
             http_status_code = 200;
 
-            if(http_status_code == config.getHttpStatusCode("SUCCESS")) {
+            if(http_status_code == Constant.HTTP_SUCCESS) {
                 onLoginSuccess("Dilip Kumar");
             }
             else  {
@@ -146,15 +128,13 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setEnabled(true);
         SessionManager session = new SessionManager(context);
         session.createLoginSession(userName, email);
-//        Toast.makeText(getBaseContext(), "Login Success", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-        Toast.makeText(context, "Successfully Logged in", Toast.LENGTH_SHORT).show();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_SHORT).show();
+        Message.message(context, "Login failed");
         loginButton.setEnabled(true);
     }
 

@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.creatorStudio.UploadQuestionActivity">
 
+    <!--Progress bar-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -58,7 +74,13 @@
                         android:layout_gravity="right"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:hint="Google Spreadsheed Id" />
+                        android:text=""
+                        android:hint="Google Spreadsheed Id"
+                        android:paddingRight="20dp"/>
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/icon_dashboard"/>
                 </LinearLayout>
 
                 <!-- Enter Google worksheet name -->
@@ -107,20 +129,42 @@
                     </RadioGroup>
                 </LinearLayout>
 
-                <!--Question upload button-->
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_login"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/background_login_button"
-                    android:padding="12dp"
-                    android:text="Load Questions"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="20sp"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground" />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:gravity="center">
+                   <!--Question upload button-->
+                   <android.support.v7.widget.AppCompatButton
+                       android:id="@+id/btn_field_clear"
+                       android:layout_width="113dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="24dp"
+                       android:layout_marginBottom="24dp"
+                       android:background="@drawable/background_login_button"
+                       android:clickable="true"
+                       android:foreground="?android:attr/selectableItemBackground"
+                       android:padding="12dp"
+                       android:text="Clear"
+                       android:textColor="@android:color/background_light"
+                       android:textSize="20sp" />
+
+                   <!--Question upload button-->
+                   <android.support.v7.widget.AppCompatButton
+                       android:id="@+id/btn_load_question"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginTop="24dp"
+                       android:layout_marginBottom="24dp"
+                       android:background="@drawable/background_login_button"
+                       android:padding="12dp"
+                       android:text="Load Ques"
+                       android:textColor="@android:color/background_light"
+                       android:textSize="20sp"
+                       android:clickable="true"
+                       android:foreground="?android:attr/selectableItemBackground" />
+               </LinearLayout>
 
                 <!--Important note to make sure if the user has already granted the public access-->
                 <LinearLayout
@@ -130,6 +174,7 @@
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center_horizontal">
                     <TextView
+                        android:id="@+id/important_note_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Important Note: Make sure that you have already
