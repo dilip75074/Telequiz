@@ -3,7 +3,6 @@ package com.example.telequiz.activities.creatorStudio;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.example.telequiz.R;
-import com.example.telequiz.services.Constant;
+import com.example.telequiz.services.utilities.Constant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +37,7 @@ public class UploadQuestionActivity extends AppCompatActivity {
     RadioButton defaultWorksheetNameRadioButton, customeWorksheetNameRadioButton;
     Button loadQuestionButton, clearFieldButton;
     ProgressBar progressBar;
+    Constant c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,33 +139,33 @@ public class UploadQuestionActivity extends AppCompatActivity {
         HashMap<String, String> m_li;
         for (int i = 0; i < m_jArry.length(); i++) {
             JSONObject jo_inside = m_jArry.getJSONObject(i);
-            String sNo = !jo_inside.getString("S_No").isEmpty() ? jo_inside.getString("S_No") : null;
-            String questionEnglish = !jo_inside.getString("Question_English").isEmpty() ? jo_inside.getString("Question_English") : null;
-            String questionHindi = !jo_inside.getString("Question_Hindi").isEmpty() ? jo_inside.getString("Question_Hindi") : null;
-            String optionAEnglish = !jo_inside.getString("Option_A_English").isEmpty() ? jo_inside.getString("Option_A_English") : null;
-            String optionAHindi = !jo_inside.getString("Option_A_Hindi").isEmpty() ? jo_inside.getString("Option_A_Hindi") : null;
-            String optionBEnglish = !jo_inside.getString("Option_B_English").isEmpty() ? jo_inside.getString("Option_B_English") : null;
-            String optionBHindi = !jo_inside.getString("Option_B_Hindi").isEmpty() ? jo_inside.getString("Option_B_Hindi") : null;
-            String optionCEnglish = !jo_inside.getString("Option_C_English").isEmpty() ? jo_inside.getString("Option_C_English") : null;
-            String optionCHindi = !jo_inside.getString("Option_C_Hindi").isEmpty() ? jo_inside.getString("Option_C_Hindi") : null;
-            String optionDEnglish = !jo_inside.getString("Option_D_English").isEmpty() ? jo_inside.getString("Option_D_English") : null;
-            String optionDHindi = !jo_inside.getString("Option_D_Hindi").isEmpty() ? jo_inside.getString("Option_D_Hindi") : null;
-            String correctOption = !jo_inside.getString("Correct_Option").isEmpty() ? jo_inside.getString("Correct_Option") : null;
+            String sNo = !jo_inside.getString(Constant.SL_NO).isEmpty() ? jo_inside.getString(Constant.SL_NO) : null;
+            String questionEnglish = !jo_inside.getString(Constant.QUESTION_ENGLISH).isEmpty() ? jo_inside.getString(Constant.QUESTION_ENGLISH) : null;
+            String questionHindi = !jo_inside.getString(Constant.QUESTION_HINDI).isEmpty() ? jo_inside.getString(Constant.QUESTION_HINDI) : null;
+            String optionAEnglish = !jo_inside.getString(Constant.OPTION_A_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_A_ENGLISH) : null;
+            String optionAHindi = !jo_inside.getString(Constant.OPTION_A_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_A_HINDI) : null;
+            String optionBEnglish = !jo_inside.getString(Constant.OPTION_B_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_B_ENGLISH) : null;
+            String optionBHindi = !jo_inside.getString(Constant.OPTION_B_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_B_HINDI) : null;
+            String optionCEnglish = !jo_inside.getString(Constant.OPTION_C_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_C_ENGLISH) : null;
+            String optionCHindi = !jo_inside.getString(Constant.OPTION_C_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_C_HINDI) : null;
+            String optionDEnglish = !jo_inside.getString(Constant.OPTION_D_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_D_ENGLISH) : null;
+            String optionDHindi = !jo_inside.getString(Constant.OPTION_D_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_D_HINDI) : null;
+            String correctOption = !jo_inside.getString(Constant.CORRECT_OPTION).isEmpty() ? jo_inside.getString(Constant.CORRECT_OPTION) : null;
 
             //Add your values in your `ArrayList` as below:
             m_li = new HashMap<String, String>();
-            m_li.put("S_No", sNo);
-            m_li.put("Question_English", questionEnglish);
-            m_li.put("Question_Hindi", questionHindi);
-            m_li.put("Option_A_English", optionAEnglish);
-            m_li.put("Option_A_Hindi", optionAHindi);
-            m_li.put("Option_B_English", optionBEnglish);
-            m_li.put("Option_B_Hindi", optionBHindi);
-            m_li.put("Option_C_English", optionCEnglish);
-            m_li.put("Option_C_Hindi", optionCHindi);
-            m_li.put("Option_D_English", optionDEnglish);
-            m_li.put("Option_D_Hindi", optionDHindi);
-            m_li.put("Correct_Option", correctOption);
+            m_li.put(Constant.SL_NO, sNo);
+            m_li.put(Constant.QUESTION_ENGLISH, questionEnglish);
+            m_li.put(Constant.QUESTION_HINDI, questionHindi);
+            m_li.put(Constant.OPTION_A_ENGLISH, optionAEnglish);
+            m_li.put(Constant.OPTION_A_HINDI, optionAHindi);
+            m_li.put(Constant.OPTION_B_ENGLISH, optionBEnglish);
+            m_li.put(Constant.OPTION_B_HINDI, optionBHindi);
+            m_li.put(Constant.OPTION_C_ENGLISH, optionCEnglish);
+            m_li.put(Constant.OPTION_C_HINDI, optionCHindi);
+            m_li.put(Constant.OPTION_D_ENGLISH, optionDEnglish);
+            m_li.put(Constant.OPTION_D_HINDI, optionDHindi);
+            m_li.put(Constant.CORRECT_OPTION, correctOption);
 
             formList.add(m_li);
         }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
-import com.example.telequiz.services.Constant;
+import com.example.telequiz.services.utilities.Constant;
 import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Message;
 
