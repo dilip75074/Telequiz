@@ -49,24 +49,24 @@
             android:parentActivityName=".activities.home.MainActivity"
             android:screenOrientation="portrait" />
 
-        <!--CreatorStudio:- Dashboard Activity-->
+        <!-- CreatorStudio:- Dashboard Activity -->
         <activity
             android:name=".activities.creatorStudio.DashboardActivity"
             android:parentActivityName=".activities.home.MainActivity"
             android:screenOrientation="portrait" />
 
-        <!--CreatorStudio:- Upload Question Activity-->
+        <!-- CreatorStudio:- Upload Question Activity -->
         <activity
             android:name=".activities.creatorStudio.UploadQuestionActivity"
             android:parentActivityName=".activities.creatorStudio.DashboardActivity"
             android:screenOrientation="portrait" />
 
-        <!--CreatorStudio:- Full analytics Activity-->
+        <!-- CreatorStudio:- Full analytics Activity -->
         <activity
             android:name=".activities.creatorStudio.FullAnalyticsActivity"
             android:parentActivityName=".activities.creatorStudio.DashboardActivity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".activities.creatorStudio.UploadedQuestionReviewActivity"></activity>
     </application>
 
 </manifest>

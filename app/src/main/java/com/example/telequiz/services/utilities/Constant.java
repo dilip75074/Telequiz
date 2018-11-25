@@ -55,4 +55,9 @@ public class Constant {
     public static final String OPTION_D_ENGLISH = "option_d_english";
     public static final String OPTION_D_HINDI = "option_d_hindi";
     public static final String CORRECT_OPTION = "correct_option";
+
+    /*
+    * Keys to pass value from one activity to another
+    * */
+    public static final String UPLOADED_QUESTIONS = "upload_question";
 }

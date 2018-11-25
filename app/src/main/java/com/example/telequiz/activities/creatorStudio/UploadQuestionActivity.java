@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -104,14 +105,7 @@ public class UploadQuestionActivity extends AppCompatActivity {
                 /**
                  * Handle Response
                  */
-                try {
-                    JSONArray questionDataArray =  new JSONObject(_response).optJSONArray("questions");
-//                    TextView impNoteText= findViewById(R.id.important_note_text);
-//                    impNoteText.setText(_response.toString());
-                    sendQuestionDataForReview(_response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                sendQuestionDataForReview(_response);
             }
 
             @Override
@@ -132,45 +126,12 @@ public class UploadQuestionActivity extends AppCompatActivity {
         });
     }
 
-    private void sendQuestionDataForReview(String response) throws JSONException {
-        JSONObject obj = new JSONObject(response);
-        JSONArray m_jArry = obj.getJSONArray("records");
-        ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> m_li;
-        for (int i = 0; i < m_jArry.length(); i++) {
-            JSONObject jo_inside = m_jArry.getJSONObject(i);
-            String sNo = !jo_inside.getString(Constant.SL_NO).isEmpty() ? jo_inside.getString(Constant.SL_NO) : null;
-            String questionEnglish = !jo_inside.getString(Constant.QUESTION_ENGLISH).isEmpty() ? jo_inside.getString(Constant.QUESTION_ENGLISH) : null;
-            String questionHindi = !jo_inside.getString(Constant.QUESTION_HINDI).isEmpty() ? jo_inside.getString(Constant.QUESTION_HINDI) : null;
-            String optionAEnglish = !jo_inside.getString(Constant.OPTION_A_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_A_ENGLISH) : null;
-            String optionAHindi = !jo_inside.getString(Constant.OPTION_A_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_A_HINDI) : null;
-            String optionBEnglish = !jo_inside.getString(Constant.OPTION_B_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_B_ENGLISH) : null;
-            String optionBHindi = !jo_inside.getString(Constant.OPTION_B_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_B_HINDI) : null;
-            String optionCEnglish = !jo_inside.getString(Constant.OPTION_C_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_C_ENGLISH) : null;
-            String optionCHindi = !jo_inside.getString(Constant.OPTION_C_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_C_HINDI) : null;
-            String optionDEnglish = !jo_inside.getString(Constant.OPTION_D_ENGLISH).isEmpty() ? jo_inside.getString(Constant.OPTION_D_ENGLISH) : null;
-            String optionDHindi = !jo_inside.getString(Constant.OPTION_D_HINDI).isEmpty() ? jo_inside.getString(Constant.OPTION_D_HINDI) : null;
-            String correctOption = !jo_inside.getString(Constant.CORRECT_OPTION).isEmpty() ? jo_inside.getString(Constant.CORRECT_OPTION) : null;
+    private void sendQuestionDataForReview(String response) {
+        Log.i("Dilip Kumar:-", response );
 
-            //Add your values in your `ArrayList` as below:
-            m_li = new HashMap<String, String>();
-            m_li.put(Constant.SL_NO, sNo);
-            m_li.put(Constant.QUESTION_ENGLISH, questionEnglish);
-            m_li.put(Constant.QUESTION_HINDI, questionHindi);
-            m_li.put(Constant.OPTION_A_ENGLISH, optionAEnglish);
-            m_li.put(Constant.OPTION_A_HINDI, optionAHindi);
-            m_li.put(Constant.OPTION_B_ENGLISH, optionBEnglish);
-            m_li.put(Constant.OPTION_B_HINDI, optionBHindi);
-            m_li.put(Constant.OPTION_C_ENGLISH, optionCEnglish);
-            m_li.put(Constant.OPTION_C_HINDI, optionCHindi);
-            m_li.put(Constant.OPTION_D_ENGLISH, optionDEnglish);
-            m_li.put(Constant.OPTION_D_HINDI, optionDHindi);
-            m_li.put(Constant.CORRECT_OPTION, correctOption);
-
-            formList.add(m_li);
-        }
-        TextView impNoteText= findViewById(R.id.important_note_text);
-        impNoteText.setText(formList.toString());
+        Intent intent = new Intent(context, UploadedQuestionReviewActivity.class);
+        intent.putExtra(Constant.UPLOADED_QUESTIONS, response);
+        startActivity(intent);
     }
 
     private void enableUserInteraction(boolean b) {
