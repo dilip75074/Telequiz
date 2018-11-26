@@ -1,5 +1,6 @@
 package com.example.telequiz.activities.home;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigationView;
-    Menu menu;
     SessionManager session;
     Context context;
     private ViewPager mViewPager;
@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
-        // Session class instance
-        session = new SessionManager(context);
     }
 
     @Override
@@ -171,11 +168,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initAllComponents() {
-        context = getApplicationContext();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.mainViewPager);
         mTabLayout = (TabLayout) findViewById(R.id.mainTabLayout); // get the reference of TabLayout
         navigationView = findViewById(R.id.nav_view);
+        context = getApplicationContext();
         session = new SessionManager(context);
     }
 }

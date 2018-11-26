@@ -1,5 +1,6 @@
 package com.example.telequiz.activities.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
+import com.example.telequiz.services.SessionManager;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    TextView _loginLink;
-    EditText _emailText;
-    Button _passwordRecoverButton;
+    TextView loginLink;
+    EditText emailText;
+    Button passwordRecoverButton;
+    SessionManager session;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +26,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account_forgot_password);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Forgot Password");
-        initAllViews();
+        initAllComponents();
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -39,9 +43,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void initAllViews() {
-        _emailText = findViewById(R.id.input_email);
-        _passwordRecoverButton = findViewById(R.id.btn_password_recover);
-        _loginLink = findViewById(R.id.link_login);
+    private void initAllComponents() {
+        emailText = findViewById(R.id.input_email);
+        passwordRecoverButton = findViewById(R.id.btn_password_recover);
+        loginLink = findViewById(R.id.link_login);
+        context = getApplicationContext();
+        session = new SessionManager(context);
     }
 }

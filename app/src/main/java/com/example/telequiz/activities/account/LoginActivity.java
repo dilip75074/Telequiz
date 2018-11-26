@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.utilities.Constant;
 import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Message;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,15 +28,24 @@ public class LoginActivity extends AppCompatActivity {
     TextView signupLink, forgotPasswordLink;
     EditText emailText, passwordText;
     Button loginButton;
+    CheckBox rememberMeCheckBox;
+
+    HashMap<String, String> user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Login");
         setContentView(R.layout.activity_account_login);
-        context = getApplicationContext();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initAllComponents();
+
+        String userEmail = session.getUserEmailFromLoginHistory();
+        if(userEmail != null) {
+            emailText.setText(userEmail);
+            passwordText.requestFocus();
+            session.clearSessionData();
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -69,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-
         if(isValidEmail() && isValidPassword()) {
             remoteAuthenticate();
         }
@@ -125,17 +136,17 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess(String userName) {
         String email = emailText.getText().toString();
-        loginButton.setEnabled(true);
-        SessionManager session = new SessionManager(context);
-        session.createLoginSession(userName, email);
+        boolean isRememberMeChecked = rememberMeCheckBox.isChecked();
+
+        session.createLoginSession(userName, email, isRememberMeChecked);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+
     }
 
     public void onLoginFailed() {
         Message.message(context, "Login failed");
-        loginButton.setEnabled(true);
     }
 
     private void initAllComponents() {
@@ -144,5 +155,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.btn_login);
         signupLink = findViewById(R.id.link_signup);
         forgotPasswordLink = findViewById(R.id.link_forgot_password);
+        rememberMeCheckBox = findViewById(R.id.check_box_remeber_me);
+        context = getApplicationContext();
+        session = new SessionManager(context);
     }
 }

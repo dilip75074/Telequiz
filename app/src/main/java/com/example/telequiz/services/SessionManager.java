@@ -12,16 +12,17 @@ import android.widget.TextView;
 import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.activities.account.LoginActivity;
+import com.example.telequiz.services.utilities.Constant;
 import com.example.telequiz.services.utilities.Message;
 
 import java.util.HashMap;
 
 public class SessionManager {
     // Shared Preferences
-    SharedPreferences pref;
+    SharedPreferences pref, emailPref;
 
     // Editor for Shared preferences
-    Editor editor;
+    Editor editor, emailEditor;
 
     // Context
     Context context;
@@ -30,28 +31,47 @@ public class SessionManager {
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
-    private static final String PREF_NAME = "AndroidHivePref";
+    private static final String PREF_NAME = Constant.PREF_NAME;
+
+    // Sharedpref file name to store only email id
+    private static final String EMAIL_PREF_NAME = Constant.EMAIL_PREF_NAME;
 
     // All Shared Preferences Keys
-    private static final String IS_LOGGED_IN = "IsLoggedIn";
+    private static final String IS_LOGGED_IN = Constant.IS_LOGGED_IN;
 
     // User name (make variable public to access from outside)
-    public static final String KEY_NAME = "name";
+    private static final String KEY_NAME = Constant.KEY_NAME;
 
     // Email address (make variable public to access from outside)
-    public static final String KEY_EMAIL = "email";
+    private static final String KEY_EMAIL = Constant.KEY_EMAIL;
+
+    // Email address (make variable public to access from outside)
+    private static final String IS_REMEMBER_ME_CHECKED = Constant.IS_REMEMBER_ME_CHECKED;
+
+    //session flag variable is mainly used to implement the remember check box functionality.
+    private static int SESSION_FLAG;
 
     // Constructor
     public SessionManager(Context context){
         this.context = context;
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        emailPref = context.getSharedPreferences(EMAIL_PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+        emailEditor = emailPref.edit();
+
+        if(isRemeberMeChecked()) {
+            SESSION_FLAG = 1;
+        }
+        else if(isLoggedIn() && SESSION_FLAG == 0 && !isRemeberMeChecked()){
+            clearSessionData();
+        }
     }
 
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(String name, String email, boolean isRememberMeChecked){
+        SESSION_FLAG = 1;
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGGED_IN, true);
 
@@ -60,9 +80,13 @@ public class SessionManager {
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+        emailEditor.putString(KEY_EMAIL, email);
+
+        editor.putBoolean(IS_REMEMBER_ME_CHECKED, isRememberMeChecked);
 
         // commit changes
         editor.commit();
+        emailEditor.commit();
         Message.message(context, "Successfully Logged in");
     }
 
@@ -86,6 +110,13 @@ public class SessionManager {
         }
     }
 
+    /*
+    * Get user email from login history
+    * */
+    public String getUserEmailFromLoginHistory() {
+        return emailPref.getString(KEY_EMAIL, null);
+    }
+
     /**
      * Get stored session data
      * */
@@ -102,7 +133,7 @@ public class SessionManager {
     }
 
     /**
-     * Clear session details
+     * User Logout
      * */
     public void logoutUser(){
         // Clearing all data from Shared Preferences
@@ -123,11 +154,26 @@ public class SessionManager {
     }
 
     /**
-     * Quick check for login
+     * User Logout
+     * */
+    public void clearSessionData(){
+        // Clearing all data from Shared Preferences
+        editor.clear();
+        editor.commit();
+    }
+
+    /**
+     * Quick check for login status
      * **/
-    // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGGED_IN, false);
+    }
+
+    /**
+     * Quick check for remember me check box status of last login
+     * **/
+    public boolean isRemeberMeChecked(){
+        return pref.getBoolean(IS_REMEMBER_ME_CHECKED, false);
     }
 
     /**

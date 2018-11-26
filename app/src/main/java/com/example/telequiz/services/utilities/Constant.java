@@ -14,9 +14,26 @@ public class Constant {
     * */
     public static String GOOGLE_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?";
 
+
     /*
-    * HTTP status code
-    * */
+    * User detail:-
+    **/
+    public static final String PREF_NAME = "telequiz_pref";
+    public static final String EMAIL_PREF_NAME = "telequiz_user_email_pref";
+
+    // All Shared Preferences Keys
+    public static final String IS_LOGGED_IN = "is_logged_in";
+
+    // User name (make variable public to access from outside)
+    public static final String KEY_NAME = "user_name";
+
+    // Email address (make variable public to access from outside)
+    public static final String KEY_EMAIL = "user_email";
+    public static final String IS_REMEMBER_ME_CHECKED = "is_remember_me_checked";
+
+    /*
+     *HTTP status code
+     **/
 
     // 1xx: Information
 

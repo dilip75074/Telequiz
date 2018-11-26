@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
-import com.example.telequiz.services.ConfigManager;
+import com.example.telequiz.services.SessionManager;
+import com.example.telequiz.services.utilities.Message;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
+    SessionManager session;
     Context context;
-    ConfigManager config;
 
     TextView backToHomeLink;
     EditText oldPasswordText, newPasswordText, confirmNewPasswordText;
@@ -59,6 +60,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            Message.message(context, "Session expired");
                             Intent intent = new Intent(context, LoginActivity.class);
                             startActivity(intent);
                             finish();
@@ -109,5 +111,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         confirmNewPasswordText = findViewById(R.id.input_confirm_new_password);
         backToHomeLink = findViewById(R.id.back_to_home_link);
         changePasswordButton = findViewById(R.id.btn_change_passsword);
+        context = getApplicationContext();
+        session = new SessionManager(context);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
+import com.example.telequiz.services.SessionManager;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText firstNameText, lastNameText, emailText, passwordText, confirmPasswordText, mobileText;
     Button signupButton;
     CheckBox termOfServiceCheckBox;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Sign Up");
         context = getApplicationContext();
-        initAllViews();
+        initAllComponents();
 
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,19 +52,6 @@ public class SignUpActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(context, LoginActivity.class);
         startActivity(intent);
-    }
-
-    private void initAllViews() {
-        firstNameText = findViewById(R.id.input_first_name);
-        lastNameText = findViewById(R.id.input_last_name);
-        emailText = findViewById(R.id.input_email);
-        passwordText = findViewById(R.id.input_password);
-        confirmPasswordText = findViewById(R.id.input_confirm_password);
-        mobileText = findViewById(R.id.input_mobile_no);
-        signupButton = findViewById(R.id.btn_signup);
-        loginLink = findViewById(R.id.link_login);
-        forgotPasswordLink = findViewById(R.id.link_forgot_password);
-        termOfServiceCheckBox = findViewById(R.id.term_of_service_check_box);
     }
 
     private void validateUserData() {
@@ -210,5 +199,20 @@ public class SignUpActivity extends AppCompatActivity {
                     .show();
             return false;
         }
+    }
+
+    private void initAllComponents() {
+        firstNameText = findViewById(R.id.input_first_name);
+        lastNameText = findViewById(R.id.input_last_name);
+        emailText = findViewById(R.id.input_email);
+        passwordText = findViewById(R.id.input_password);
+        confirmPasswordText = findViewById(R.id.input_confirm_password);
+        mobileText = findViewById(R.id.input_mobile_no);
+        signupButton = findViewById(R.id.btn_signup);
+        loginLink = findViewById(R.id.link_login);
+        forgotPasswordLink = findViewById(R.id.link_forgot_password);
+        termOfServiceCheckBox = findViewById(R.id.term_of_service_check_box);
+        context = getApplicationContext();
+        session = new SessionManager(context);
     }
 }
