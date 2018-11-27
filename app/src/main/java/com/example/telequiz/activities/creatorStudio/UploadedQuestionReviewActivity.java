@@ -3,7 +3,7 @@ package com.example.telequiz.activities.creatorStudio;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.telequiz.R;
 import com.example.telequiz.services.utilities.Constant;
@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UploadedQuestionReviewActivity extends AppCompatActivity {
 
@@ -35,8 +36,11 @@ public class UploadedQuestionReviewActivity extends AppCompatActivity {
     private void setCustomListViewAdapter(String uploadedQuestions) throws JSONException {
         JSONObject obj = new JSONObject(uploadedQuestions);
         JSONArray m_jArry = obj.getJSONArray("records");
-        ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
+
+        List<QuestionData> questionDataList = new ArrayList<>();
+        ListView questionListView = findViewById(R.id.question_list_view);
         HashMap<String, String> m_li;
+
         for (int i = 0; i < m_jArry.length(); i++) {
             JSONObject jo_inside = m_jArry.getJSONObject(i);
             String sNo = !jo_inside.getString(Constant.SL_NO).isEmpty() ? jo_inside.getString(Constant.SL_NO) : null;
@@ -67,10 +71,13 @@ public class UploadedQuestionReviewActivity extends AppCompatActivity {
             m_li.put(Constant.OPTION_D_HINDI, optionDHindi);
             m_li.put(Constant.CORRECT_OPTION, correctOption);
 
-            formList.add(m_li);
+            questionDataList.add(new QuestionData(m_li));
         }
-        TextView textView = findViewById(R.id.text_view);
-        textView.setText(formList.toString());
-        Log.i("Dilip Kumar: ", formList.toString());
+
+        //creating the adapter
+        QuestionDataListAdapter adapter = new QuestionDataListAdapter(this, R.layout.question_list, questionDataList);
+
+        //attaching adapter to the listview
+        questionListView.setAdapter(adapter);
     }
 }
