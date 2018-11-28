@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.creatorStudio.UploadedQuestionReviewActivity">
+    tools:context=".activities.creatorStudio.uploadQuestion.UploadedQuestionReviewActivity">
 
     <ListView
         android:id="@+id/question_list_view"
@@ -12,4 +12,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:smoothScrollbar="true"/>
+
+    <!--Scroll to top button-->
+    <ImageButton
+        android:id="@+id/button_scroll_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/icon_scrol_to_top"
+        android:visibility="gone"
+        />
+
 </android.support.constraint.ConstraintLayout>

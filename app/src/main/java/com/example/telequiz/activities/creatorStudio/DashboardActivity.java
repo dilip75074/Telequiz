@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.telequiz.R;
-import com.example.telequiz.activities.account.SignUpActivity;
+import com.example.telequiz.activities.creatorStudio.uploadQuestion.UploadQuestionActivity;
 
 public class DashboardActivity extends AppCompatActivity {
 

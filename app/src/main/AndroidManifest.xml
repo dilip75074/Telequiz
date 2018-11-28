@@ -28,45 +28,51 @@
         <!-- Account:- Login Activity -->
         <activity
             android:name=".activities.account.LoginActivity"
-            android:parentActivityName=".activities.home.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.home.MainActivity"/>
 
         <!-- Account:- SignUp Activity -->
         <activity
             android:name=".activities.account.SignUpActivity"
-            android:parentActivityName=".activities.account.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.account.LoginActivity"/>
 
         <!-- Account:- Forgot Password Activity -->
         <activity
             android:name=".activities.account.ForgotPasswordActivity"
-            android:parentActivityName=".activities.account.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.account.LoginActivity"/>
 
         <!-- Account:- Change Password Activity -->
         <activity
             android:name=".activities.account.ChangePasswordActivity"
-            android:parentActivityName=".activities.home.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.home.MainActivity"/>
 
         <!-- CreatorStudio:- Dashboard Activity -->
+        <!-- android:parentActivityName=".activities.home.MainActivity"-->
         <activity
             android:name=".activities.creatorStudio.DashboardActivity"
-            android:parentActivityName=".activities.home.MainActivity"
             android:screenOrientation="portrait" />
 
         <!-- CreatorStudio:- Upload Question Activity -->
         <activity
-            android:name=".activities.creatorStudio.UploadQuestionActivity"
-            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
-            android:screenOrientation="portrait" />
+            android:name=".activities.creatorStudio.uploadQuestion.UploadQuestionActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"/>
 
         <!-- CreatorStudio:- Full analytics Activity -->
         <activity
             android:name=".activities.creatorStudio.FullAnalyticsActivity"
-            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activities.creatorStudio.UploadedQuestionReviewActivity"></activity>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"/>
+
+        <!-- CreatorStudio:- Quesiton Review Activity -->
+        <activity
+            android:name=".activities.creatorStudio.uploadQuestion.UploadedQuestionReviewActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activities.creatorStudio.uploadQuestion.UploadQuestionActivity"
+            ></activity>
     </application>
 
 </manifest>

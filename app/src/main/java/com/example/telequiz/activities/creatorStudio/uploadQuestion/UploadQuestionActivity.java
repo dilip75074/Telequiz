@@ -1,11 +1,10 @@
-package com.example.telequiz.activities.creatorStudio;
+package com.example.telequiz.activities.creatorStudio.uploadQuestion;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,14 +16,9 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.example.telequiz.R;
+import com.example.telequiz.activities.creatorStudio.DashboardActivity;
+import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.utilities.Constant;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import io.gloxey.gnm.interfaces.VolleyResponse;
 import io.gloxey.gnm.managers.ConnectionManager;
@@ -90,6 +84,12 @@ public class UploadQuestionActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(context, DashboardActivity.class);
+        startActivity(intent);
+    }
+
     private void loadQuestions() {
         String scriptBaseUrl = Constant.GOOGLE_SCRIPT_BASE_URL;
         final String googleSheetId = googleSheetIdText.getText().toString();
@@ -127,8 +127,6 @@ public class UploadQuestionActivity extends AppCompatActivity {
     }
 
     private void sendQuestionDataForReview(String response) {
-        Log.i("Dilip Kumar:-", response );
-
         Intent intent = new Intent(context, UploadedQuestionReviewActivity.class);
         intent.putExtra(Constant.UPLOADED_QUESTIONS, response);
         startActivity(intent);

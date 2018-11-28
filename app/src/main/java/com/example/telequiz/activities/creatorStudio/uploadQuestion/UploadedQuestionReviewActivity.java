@@ -1,11 +1,20 @@
-package com.example.telequiz.activities.creatorStudio;
+package com.example.telequiz.activities.creatorStudio.uploadQuestion;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.telequiz.R;
+import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Constant;
 
 import org.json.JSONArray;
@@ -18,14 +27,59 @@ import java.util.List;
 
 public class UploadedQuestionReviewActivity extends AppCompatActivity {
 
+    SessionManager session;
+    Context context;
+
+    ImageButton scrollToTopButton;
+    ListView questionListView;
+    QuestionDataListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator_studio_uploaded_question_review);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Question Review");
+        initAllComponents();
+
+        scrollToTopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                questionListView.setSelection(3);
+                questionListView.smoothScrollToPosition(0);
+            }
+        });
+
+        questionListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if(firstVisibleItem  > 2) {
+                    scrollToTopButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    scrollToTopButton.setVisibility(View.GONE);
+                }
+                if(mLastFirstVisibleItem<firstVisibleItem) {
+                    Log.i("DK SCROLLING DOWN","TRUE");
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem) {
+                    Log.i("DK SCROLLING UP","TRUE");
+                }
+                mLastFirstVisibleItem=firstVisibleItem;
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         String uploadedQuestions = bundle.getString(Constant.UPLOADED_QUESTIONS);
-        Log.i("All questions:-", uploadedQuestions );
         try {
             setCustomListViewAdapter(uploadedQuestions);
         } catch (JSONException e) {
@@ -33,12 +87,32 @@ public class UploadedQuestionReviewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure want to discard this?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(context, UploadQuestionActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
     private void setCustomListViewAdapter(String uploadedQuestions) throws JSONException {
         JSONObject obj = new JSONObject(uploadedQuestions);
         JSONArray m_jArry = obj.getJSONArray("records");
 
         List<QuestionData> questionDataList = new ArrayList<>();
-        ListView questionListView = findViewById(R.id.question_list_view);
         HashMap<String, String> m_li;
 
         for (int i = 0; i < m_jArry.length(); i++) {
@@ -75,9 +149,16 @@ public class UploadedQuestionReviewActivity extends AppCompatActivity {
         }
 
         //creating the adapter
-        QuestionDataListAdapter adapter = new QuestionDataListAdapter(this, R.layout.question_list, questionDataList);
+       adapter = new QuestionDataListAdapter(this, R.layout.activity_creator_studio_uploaded_question_list, questionDataList);
 
         //attaching adapter to the listview
         questionListView.setAdapter(adapter);
+    }
+
+    private void initAllComponents() {
+        questionListView = findViewById(R.id.question_list_view);
+        scrollToTopButton = findViewById(R.id.button_scroll_to_top);
+        context = getApplicationContext();
+        session = new SessionManager(context);
     }
 }

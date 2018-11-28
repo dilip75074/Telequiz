@@ -1,4 +1,4 @@
-package com.example.telequiz.activities.creatorStudio;
+package com.example.telequiz.activities.creatorStudio.uploadQuestion;
 
 import java.util.HashMap;
 
