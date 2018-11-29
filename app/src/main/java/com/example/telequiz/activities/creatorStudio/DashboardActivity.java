@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.telequiz.R;
 import com.example.telequiz.activities.creatorStudio.uploadQuestion.UploadQuestionActivity;
+import com.example.telequiz.activities.home.MainActivity;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -41,6 +42,12 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
     }
 
     private void initAllComponents() {

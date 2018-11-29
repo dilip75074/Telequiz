@@ -53,6 +53,7 @@
         <!-- android:parentActivityName=".activities.home.MainActivity"-->
         <activity
             android:name=".activities.creatorStudio.DashboardActivity"
+            android:parentActivityName=".activities.home.MainActivity"
             android:screenOrientation="portrait" />
 
         <!-- CreatorStudio:- Upload Question Activity -->

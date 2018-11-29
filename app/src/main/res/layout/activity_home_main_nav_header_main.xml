@@ -24,6 +24,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:orientation="vertical">
+
               <de.hdodenhof.circleimageview.CircleImageView
                   xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:id="@+id/profile_image"
@@ -31,8 +32,7 @@
                   android:layout_height="75dp"
                   android:src="@drawable/dilip_dp"
                   app:civ_border_width="2dp"
-                  app:civ_border_color="#FFFFFF"
-                  android:onClick="zoomProfilePic"/>
+                  app:civ_border_color="#FFFFFF" />
               <TextView
                   android:id="@+id/nav_header_logged_in_user_name"
                   android:layout_width="match_parent"
@@ -70,6 +70,7 @@
                android:layout_centerHorizontal="true"
                android:background="@drawable/icon_login"
                android:clickable="true"
+               android:scaleType="centerCrop"
                android:foreground="?android:attr/selectableItemBackground"
                android:onClick="goForLogin" />
 
