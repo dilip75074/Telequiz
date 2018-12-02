@@ -51,6 +51,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
+    }
+
     private void validatePassword() {
         if(isValidOldPassword() && isValidNewPassword()) {
             new AlertDialog.Builder(this)

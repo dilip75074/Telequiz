@@ -28,6 +28,7 @@ import com.example.telequiz.activities.account.LoginActivity;
 import com.example.telequiz.activities.creatorStudio.DashboardActivity;
 import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
+import com.example.telequiz.services.AppUpdateChecker;
 import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Message;
 
@@ -89,19 +90,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        menu.setGroupVisible(R.id.main_activity_menu_group, true);
+        menu.setGroupVisible(R.id.creator_studio_menu_group, false);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             return;  //do nothing
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override
@@ -178,5 +182,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         context = getApplicationContext();
         session = new SessionManager(context);
+
+        new AppUpdateChecker(this).notifyUserIfAnUpdate();
     }
 }

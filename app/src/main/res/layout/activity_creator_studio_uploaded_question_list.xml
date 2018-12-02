@@ -37,7 +37,7 @@
             android:orientation="vertical"
             android:padding="10dp">
             <TextView
-                android:id="@+id/ques_english"
+                android:id="@+id/question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -54,7 +54,7 @@
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
                 <TextView
-                    android:id="@+id/option_a_english"
+                    android:id="@+id/option_a"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -74,7 +74,7 @@
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
                 <TextView
-                    android:id="@+id/option_b_english"
+                    android:id="@+id/option_b"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -94,7 +94,7 @@
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
                 <TextView
-                    android:id="@+id/option_c_english"
+                    android:id="@+id/option_c"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -114,7 +114,7 @@
                     android:textSize="20sp"
                     android:gravity="center_vertical"/>
                 <TextView
-                    android:id="@+id/option_d_english"
+                    android:id="@+id/option_d"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"

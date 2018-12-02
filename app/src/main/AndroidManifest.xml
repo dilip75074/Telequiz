@@ -28,29 +28,29 @@
         <!-- Account:- Login Activity -->
         <activity
             android:name=".activities.account.LoginActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.home.MainActivity"/>
+            android:parentActivityName=".activities.home.MainActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Account:- SignUp Activity -->
         <activity
             android:name=".activities.account.SignUpActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.account.LoginActivity"/>
+            android:parentActivityName=".activities.account.LoginActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Account:- Forgot Password Activity -->
         <activity
             android:name=".activities.account.ForgotPasswordActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.account.LoginActivity"/>
+            android:parentActivityName=".activities.account.LoginActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Account:- Change Password Activity -->
         <activity
             android:name=".activities.account.ChangePasswordActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.home.MainActivity"/>
+            android:parentActivityName=".activities.home.MainActivity"
+            android:screenOrientation="portrait" />
 
         <!-- CreatorStudio:- Dashboard Activity -->
-        <!-- android:parentActivityName=".activities.home.MainActivity"-->
+        <!-- android:parentActivityName=".activities.home.MainActivity" -->
         <activity
             android:name=".activities.creatorStudio.DashboardActivity"
             android:parentActivityName=".activities.home.MainActivity"
@@ -59,21 +59,24 @@
         <!-- CreatorStudio:- Upload Question Activity -->
         <activity
             android:name=".activities.creatorStudio.uploadQuestion.UploadQuestionActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.creatorStudio.DashboardActivity"/>
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
+            android:screenOrientation="portrait" />
 
         <!-- CreatorStudio:- Full analytics Activity -->
         <activity
-            android:name=".activities.creatorStudio.FullAnalyticsActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.creatorStudio.DashboardActivity"/>
+            android:name=".activities.creatorStudio.channel.channelAnalytics.ChannelAnalyticsActivity"
+            android:parentActivityName=".activities.creatorStudio.DashboardActivity"
+            android:screenOrientation="portrait" />
 
         <!-- CreatorStudio:- Quesiton Review Activity -->
         <activity
             android:name=".activities.creatorStudio.uploadQuestion.UploadedQuestionReviewActivity"
-            android:screenOrientation="portrait"
             android:parentActivityName=".activities.creatorStudio.uploadQuestion.UploadQuestionActivity"
-            ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.creatorStudio.channel.createChannel.CreateChannelActivity" />
+        <activity android:name=".activities.creatorStudio.revenue.RevenueReportActivity" />
+        <activity android:name=".activities.creatorStudio.channel.deleteChannel.DeleteChannelActivity" />
+        <activity android:name=".activities.AppUpdateNotificationActivity" />
     </application>
 
 </manifest>

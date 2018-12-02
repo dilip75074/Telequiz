@@ -8,9 +8,30 @@
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="101"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+
+    <group
+        android:id="@+id/main_activity_menu_group">
+        <item
+            android:id="@+id/action_settings"
+            android:icon="@drawable/icon_setting"
+            android:orderInCategory="101"
+            android:title="@string/action_settings"
+            app:showAsAction="never" />
+        </group>
+
+    <!--Creator Studio Dashboard Activity-->
+    <group
+        android:id="@+id/creator_studio_menu_group">
+
+        <item
+            android:id="@+id/create_new_channel_menu"
+            android:orderInCategory="102"
+            android:title="Create New Channel" />
+
+        <item
+            android:id="@+id/channel_settings_menu"
+            android:orderInCategory="103"
+            android:title="Channel Settings" />
+
+    </group>
 </menu>

@@ -1,10 +1,12 @@
 package com.example.telequiz.services;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,32 +32,28 @@ public class SessionManager {
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    /*
+    * User session
+    * */
     private static final String PREF_NAME = Constant.PREF_NAME;
-
-    // Sharedpref file name to store only email id
-    private static final String EMAIL_PREF_NAME = Constant.EMAIL_PREF_NAME;
-
-    // All Shared Preferences Keys
     private static final String IS_LOGGED_IN = Constant.IS_LOGGED_IN;
-
-    // User name (make variable public to access from outside)
     private static final String KEY_NAME = Constant.KEY_NAME;
-
-    // Email address (make variable public to access from outside)
     private static final String KEY_EMAIL = Constant.KEY_EMAIL;
 
-    // Email address (make variable public to access from outside)
+    /*
+    * Session for the use of Remember me functionality while logging in
+    * */
+    private static final String EMAIL_PREF_NAME = Constant.EMAIL_PREF_NAME;
     private static final String IS_REMEMBER_ME_CHECKED = Constant.IS_REMEMBER_ME_CHECKED;
+    private static int SESSION_FLAG; //session flag variable is mainly used to implement the remember check box functionality.
 
-    //session flag variable is mainly used to implement the remember check box functionality.
-    private static int SESSION_FLAG;
 
     // Constructor
     public SessionManager(Context context){
         this.context = context;
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         emailPref = context.getSharedPreferences(EMAIL_PREF_NAME, PRIVATE_MODE);
+
         editor = pref.edit();
         emailEditor = emailPref.edit();
 

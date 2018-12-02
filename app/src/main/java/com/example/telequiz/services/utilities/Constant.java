@@ -10,25 +10,23 @@ public class Constant {
 
 
     /*
-    * Base url to fetch question from the google sheet
-    * */
+     * Base url to fetch question from the google sheet
+     * */
     public static String GOOGLE_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?";
 
 
     /*
-    * User detail:-
-    **/
+     *User login and logout related session keys:-
+     **/
     public static final String PREF_NAME = "telequiz_pref";
-    public static final String EMAIL_PREF_NAME = "telequiz_user_email_pref";
-
-    // All Shared Preferences Keys
     public static final String IS_LOGGED_IN = "is_logged_in";
-
-    // User name (make variable public to access from outside)
     public static final String KEY_NAME = "user_name";
-
-    // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "user_email";
+
+    /*
+     * Keys for the use of Session which maintains the flag about the Remember me feature in the login Activity
+     * */
+    public static final String EMAIL_PREF_NAME = "telequiz_user_email_pref";
     public static final String IS_REMEMBER_ME_CHECKED = "is_remember_me_checked";
 
     /*
@@ -54,27 +52,41 @@ public class Constant {
     // 5xx: Server Error
 
     /*
-    * Database related
-    * */
+     * Database related
+     * */
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "QuestionData.db";
     public static final String QUESTION_TABLE_NAME = "quesion";
     public static final String QUESTION_TABLE_COLUMN_ID = "_id";
     public static final String SL_NO = "s_no";
-    public static final String QUESTION_ENGLISH = "question_english";
-    public static final String QUESTION_HINDI = "question_hindi";
-    public static final String OPTION_A_ENGLISH = "option_a_english";
-    public static final String OPTION_A_HINDI = "option_a_hindi";
-    public static final String OPTION_B_ENGLISH = "option_b_english";
-    public static final String OPTION_B_HINDI = "option_b_hindi";
-    public static final String OPTION_C_ENGLISH = "option_c_english";
-    public static final String OPTION_C_HINDI = "option_c_hindi";
-    public static final String OPTION_D_ENGLISH = "option_d_english";
-    public static final String OPTION_D_HINDI = "option_d_hindi";
+    public static final String QUESTION = "question";
+    public static final String OPTION_A = "option_a";
+    public static final String OPTION_B = "option_b";
+    public static final String OPTION_C = "option_c";
+    public static final String OPTION_D = "option_d";
     public static final String CORRECT_OPTION = "correct_option";
 
     /*
-    * Keys to pass value from one activity to another
-    * */
+     * Keys to pass value from one activity to another
+     * */
     public static final String UPLOADED_QUESTIONS = "upload_question";
+
+    /*
+     * App update checker keys
+     * */
+    public static final String UPDATE_CHECKER_URL = "http://www.mocky.io/v2/5c01f17f3500005600ad0a9c";
+    public static final String UPDATE_MESSSAGE = "There is a newer version of this application available, So click on update now to upgrade the App.";
+    public static final String UPDATE_MESSAGE_TITLE = "Update Available";
+
+    /*
+    * JSON (Question) reading error message:
+    * Error may be: Wrong google worksheet id, wrong sheet name, google sheet permission not granted etc
+    * */
+    public static final String QUESTIOND_DATA_JSON_READING_ERROR_MESSSAGE_PART_A = "Unable to read the Google excel sheet, Please make sure that:- \n\n" +
+            "1. Your mobile is connected to the Internet. \n\n" +
+            "2. You have already changed the Google sheet access permission for public. \n\n" +
+            "3. You have used the axact column field as given in the Google sheet template file. If you don't have then download it by clicking the below link and just reuse this.";
+
+    public static final String QUESTIOND_DATA_JSON_READING_ERROR_MESSSAGE_PART_B = "4. Also check if you have entered the correct Google workbook id and worksheet name.\n\n";
+    public static final String QUESTIOND_DATA_JSON_READING_ERROR_MESSSAGE_TITLE = "Error Found";
 }

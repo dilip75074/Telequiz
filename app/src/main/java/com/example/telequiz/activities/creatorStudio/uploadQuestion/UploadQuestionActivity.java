@@ -3,8 +3,8 @@ package com.example.telequiz.activities.creatorStudio.uploadQuestion;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.example.telequiz.R;
 import com.example.telequiz.activities.creatorStudio.DashboardActivity;
-import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.utilities.Constant;
 
 import io.gloxey.gnm.interfaces.VolleyResponse;
