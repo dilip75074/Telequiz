@@ -28,6 +28,7 @@ import com.example.telequiz.activities.account.LoginActivity;
 import com.example.telequiz.activities.creatorStudio.DashboardActivity;
 import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
+import com.example.telequiz.activities.quiz.PlayQuizActivity;
 import com.example.telequiz.services.AppUpdateChecker;
 import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Message;
@@ -130,7 +131,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_creator_studio_looged_in) {
+        if (id == R.id.nav_play_quiz_logged_in) {
+            Intent intent = new Intent(context, PlayQuizActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_creator_studio_looged_in) {
             Intent intent = new Intent(context, DashboardActivity.class);
             startActivity(intent);
         }
