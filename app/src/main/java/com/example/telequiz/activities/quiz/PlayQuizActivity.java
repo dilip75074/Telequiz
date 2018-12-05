@@ -1,7 +1,5 @@
 package com.example.telequiz.activities.quiz;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -9,23 +7,23 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.example.telequiz.R;
 import com.example.telequiz.services.utilities.Constant;
-import com.example.telequiz.services.utilities.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import io.gloxey.gnm.interfaces.VolleyResponse;
 import io.gloxey.gnm.managers.ConnectionManager;
@@ -43,19 +41,11 @@ public class PlayQuizActivity extends AppCompatActivity {
 
     TextView timerTextView, quizQuestionTextView, quesNoTextView;
 
-    LinearLayout commentLinearLayout, quizContainerLayout;
-
-    RadioButton optionRadioButton[] = new RadioButton[4];
-
-    ImageButton likeButton, unlikeButton, shareButton, commentButton;
-
-    boolean isLikeButtonPressed, isUnlikeButtonPressed;
+    ListView quizQuestionListView;
 
     private static int quesNo = 1;
-    private static int totalQuestion;
-    JSONObject allQuestionsDataObj = null;
-    JSONObject currentQuesDataObj;
-    JSONArray questionDataArray;
+    QuizDataListAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +61,6 @@ public class PlayQuizActivity extends AppCompatActivity {
 
         nextButton = findViewById(R.id.button_next);
 
-
-        /*nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateRightToLeftEntry();
-            }
-        });
-
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateLeftToRightEntry();
-            }
-        });*/
-
         /*
         * Previous quiz
         * */
@@ -93,7 +68,7 @@ public class PlayQuizActivity extends AppCompatActivity {
 
     }
 
-    private void animateRightToLeftEntry(final View childView, View containerView) {
+   /* private void animateRightToLeftEntry(final View childView, View containerView) {
 //        final View childView = findViewById(R.id.quiz_question);
 //        View containerView = findViewById(R.id.quiz_container);
         childView.setTranslationX(containerView.getWidth());
@@ -141,7 +116,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                         childView.setVisibility(View.GONE);
                     }
                 });
-    }
+    }*/
 
     private void setTimer(final int durationInHour, int durationInMinute, int durationInSecond) {
         int durationInMilli = durationInHour * 60 * 60 * 1000;
@@ -196,7 +171,6 @@ public class PlayQuizActivity extends AppCompatActivity {
                 timerTextView.setText("Time Left: " + timerText);
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ff0000")));
                 progressBar.setProgress(0);
-//                Quiz.this.onNextButtonPressed(nextButton);
             }
         }.start();
     }
@@ -205,38 +179,6 @@ public class PlayQuizActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch(v.getId()){
-
-                case R.id.like_button:
-                    onLikeButtonClick();
-                    break;
-
-                case R.id.unlike_button:
-                    onUnlikeButtonClick();
-                    break;
-
-                case R.id.share_button:
-                    onShareButtonClick();
-                    break;
-
-                case R.id.comment_button:
-                   onCommentButtonClick();
-                   break;
-               /*
-               * Action for Option radio button click
-               * */
-                case R.id.radio_button_a:
-                    onOptionAClick();
-                    break;
-                case R.id.radio_button_b:
-                    onOptionBClick();
-                    break;
-                case R.id.radio_button_c:
-                    onOptionCClick();
-                    break;
-                case R.id.radio_button_d:
-                    onOptionDClick();
-                    break;
-
                 /*
                  * Previous button and next button click
                  * */
@@ -251,147 +193,10 @@ public class PlayQuizActivity extends AppCompatActivity {
     };
 
     private void onPreviousButtonClick() {
-//        this.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
-        initAllComponents();
-        if (quesNo > 1) {
-            quesNo--;
-            nextButton.setText("Next");
-            setCurrentQuizData();
-        } else {
-            return;
-        }
     }
 
     private void onNextButtonClick() {
-//        this.overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
-        initAllComponents();
-        if (quesNo < questionDataArray.length()) {
-            quesNo++;
-            nextButton.setText("Next");
-            setCurrentQuizData();
-        } else if (quesNo == questionDataArray.length()) {
-            nextButton.setText("Finish");
-            Message.message(context, "Quiz Finished, see the Quiz Report");
-        } else  {
-            return;
-        }
-    }
 
-    private void onLikeButtonClick() {
-        isLikeButtonPressed = !isLikeButtonPressed;
-        int likeButtonBackgroundImage = (isLikeButtonPressed)
-                ? R.drawable.icon_like_pressed
-                : R.drawable.icon_like_not_pressed;
-
-        likeButton.setBackgroundResource(likeButtonBackgroundImage);
-    }
-
-    private void onUnlikeButtonClick() {
-        isUnlikeButtonPressed = !isUnlikeButtonPressed;
-        int unlikeButtonBackgroundImage = (isUnlikeButtonPressed)
-                ? R.drawable.icon_unlike_pressed
-                : R.drawable.icon_unlike_not_pressed;
-
-        unlikeButton.setBackgroundResource(unlikeButtonBackgroundImage);
-    }
-
-    private void onShareButtonClick() {
-    }
-
-    private void onCommentButtonClick() {
-        if (commentLinearLayout.getVisibility() == View.VISIBLE) {
-            commentLinearLayout.setVisibility(View.GONE);
-        }
-        else {
-            commentLinearLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void onOptionAClick() {
-        for (int i = 0; i<4; i++ ) {
-            if(i == 0) {
-                optionRadioButton[i].setChecked(true);
-            }
-            else {
-                optionRadioButton[i].setChecked(false);
-            }
-        }
-    }
-
-    private void onOptionBClick() {
-        for (int i = 0; i<4; i++ ) {
-            if(i == 1) {
-                optionRadioButton[i].setChecked(true);
-            }
-            else {
-                optionRadioButton[i].setChecked(false);
-            }
-        }
-    }
-
-    private void onOptionCClick() {
-        for (int i = 0; i<4; i++ ) {
-            if(i == 2) {
-                optionRadioButton[i].setChecked(true);
-            }
-            else {
-                optionRadioButton[i].setChecked(false);
-            }
-        }
-    }
-
-    private void onOptionDClick() {
-        for (int i = 0; i<4; i++ ) {
-            if(i == 3) {
-                optionRadioButton[i].setChecked(true);
-            }
-            else {
-                optionRadioButton[i].setChecked(false);
-            }
-        }
-    }
-
-    private void startQuiz() {
-        setCurrentQuizData();
-    }
-
-    private void setCurrentQuizData() {
-          String option[]= new String[4];
-//        option_RadioGroup.clearCheck();
-//        resetRadioButtons();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
-
-        setTimer(0, 1, 0);
-
-        if (quesNo == 1)
-            enableButton(previousButton, false);
-        else if (quesNo > 1)
-            enableButton(previousButton, true);
-
-        if (quesNo == questionDataArray.length()) {
-            // enableButton(nextButton, false);
-            nextButton.setText("Finish");
-        }
-        else if (quesNo < questionDataArray.length())
-            enableButton(nextButton, true);
-
-        currentQuesDataObj = questionDataArray.optJSONObject(quesNo - 1);
-        String question = currentQuesDataObj.optString(Constant.QUESTION);
-
-        option[0] = currentQuesDataObj.optString(Constant.OPTION_A);
-        option[1] = currentQuesDataObj.optString(Constant.OPTION_B);
-        option[2] = currentQuesDataObj.optString(Constant.OPTION_C);
-        option[3] = currentQuesDataObj.optString(Constant.OPTION_D);
-
-        quizQuestionTextView.setText(question);
-        quesNoTextView.setText(quesNo + "/" + totalQuestion);
-        quizQuestionTextView.setText(question);
-        for (int i = 0; i < 4; i++) {
-            optionRadioButton[i].setText(option[i]);
-        }
     }
 
     private void fetchQuestions(String _url) {
@@ -402,13 +207,10 @@ public class PlayQuizActivity extends AppCompatActivity {
                  * Handle Response
                  */
                 try {
-                    allQuestionsDataObj = new JSONObject(response);
-                    enableButton(nextButton, true);
+                    setCustomListViewAdapter(response);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                prepareAllQuestions();
-                startQuiz();
             }
 
             @Override
@@ -429,16 +231,40 @@ public class PlayQuizActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareAllQuestions() {
-        questionDataArray = allQuestionsDataObj.optJSONArray("records");
-        totalQuestion = questionDataArray.length();
-//        for (int i = 0; i < questionDataArray.length(); i++) {
-//
-//        }
-    }
+    private void setCustomListViewAdapter(String quizQuestions) throws JSONException {
+        JSONObject obj = new JSONObject(quizQuestions);
+        JSONArray m_jArry = obj.getJSONArray("records");
 
-    public void enableButton(Button button, Boolean isEnabled) {
-        button.setEnabled(isEnabled);
+        List<QuizDataModel> quizDataList = new ArrayList<>();
+        HashMap<String, String> m_li;
+
+        for (int i = 0; i < m_jArry.length(); i++) {
+            JSONObject json_inside = m_jArry.getJSONObject(i);
+            String sNo = !json_inside.getString(Constant.SL_NO).isEmpty() ? json_inside.getString(Constant.SL_NO) : null;
+            String questionEnglish = !json_inside.getString(Constant.QUESTION).isEmpty() ? json_inside.getString(Constant.QUESTION) : null;
+            String optionAEnglish = !json_inside.getString(Constant.OPTION_A).isEmpty() ? json_inside.getString(Constant.OPTION_A) : null;
+            String optionBEnglish = !json_inside.getString(Constant.OPTION_B).isEmpty() ? json_inside.getString(Constant.OPTION_B) : null;
+            String optionCEnglish = !json_inside.getString(Constant.OPTION_C).isEmpty() ? json_inside.getString(Constant.OPTION_C) : null;
+            String optionDEnglish = !json_inside.getString(Constant.OPTION_D).isEmpty() ? json_inside.getString(Constant.OPTION_D) : null;
+            String correctOption = !json_inside.getString(Constant.CORRECT_OPTION).isEmpty() ? json_inside.getString(Constant.CORRECT_OPTION) : null;
+
+            m_li = new HashMap<String, String>();
+            m_li.put(Constant.SL_NO, sNo);
+            m_li.put(Constant.QUESTION, questionEnglish);
+            m_li.put(Constant.OPTION_A, optionAEnglish);
+            m_li.put(Constant.OPTION_B, optionBEnglish);
+            m_li.put(Constant.OPTION_C, optionCEnglish);
+            m_li.put(Constant.OPTION_D, optionDEnglish);
+            m_li.put(Constant.CORRECT_OPTION, correctOption);
+
+            quizDataList.add(new QuizDataModel(m_li));
+        }
+
+        //creating the adapter
+        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_qestion_list, quizDataList);
+
+        //attaching adapter to the listview
+        quizQuestionListView.setAdapter(adapter);
     }
 
     private void initAllComponents() {
@@ -449,46 +275,17 @@ public class PlayQuizActivity extends AppCompatActivity {
 
         mainQuizScrollView = findViewById(R.id.mainQuizScrollView);
 
-        quizContainerLayout = findViewById(R.id.quiz_container);
-
         progressBar = findViewById(R.id.progressBar);
 
         quesNoTextView = findViewById(R.id.ques_no);
         timerTextView = findViewById(R.id.timer_text_view);
         quizQuestionTextView = findViewById(R.id.quiz_question);
 
-        commentLinearLayout = findViewById(R.id.comment_linear_layout);
-        commentLinearLayout.setVisibility(View.GONE);
-
-        likeButton = findViewById(R.id.like_button);
-        likeButton.setOnClickListener(onClickListener);
-        isLikeButtonPressed = false;
-
-        unlikeButton = findViewById(R.id.unlike_button);
-        unlikeButton.setOnClickListener(onClickListener);
-        isUnlikeButtonPressed = false;
-
-        shareButton = findViewById(R.id.share_button);
-        shareButton.setOnClickListener(onClickListener);
-
-        commentButton = findViewById(R.id.comment_button);
-        commentButton.setOnClickListener(onClickListener);
-
-        optionRadioButton[0] = findViewById(R.id.radio_button_a);
-        optionRadioButton[1] = findViewById(R.id.radio_button_b);
-        optionRadioButton[2] = findViewById(R.id.radio_button_c);
-        optionRadioButton[3] = findViewById(R.id.radio_button_d);
-        for (int i = 0; i<4; i++) {
-            optionRadioButton[i].setOnClickListener(onClickListener);
-        }
-
+        quizQuestionListView = findViewById(R.id.quiz_question_list);
         previousButton = findViewById(R.id.button_previous);
         previousButton.setOnClickListener(onClickListener);
 
         nextButton = findViewById(R.id.button_next);
         nextButton.setOnClickListener(onClickListener);
-        enableButton(previousButton, false);
-        enableButton(nextButton, false);
-
     }
 }
