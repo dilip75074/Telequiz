@@ -21,12 +21,13 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/ques_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:text="1/10"
-                android:textColor="@color/yellow"
+                android:textColor="#ffffff"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -40,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="Time left: 1:59"
-                    android:textColor="@color/yellow"
+                    android:textColor="#ffffff"
                     android:textSize="20sp" />
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -63,7 +64,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
-        android:id="@+id/scrollView3"
+        android:id="@+id/mainQuizScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -83,8 +84,12 @@
                 android:id="@+id/quiz_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="75dp"
+                android:background="@drawable/background_quiz_question"
                 android:layout_margin="10dp"
-                android:text="What is a ALU, CU and Cache in computer system. Also explain how a computer works with a neat and clean diagram. What is a ALU, CU and Cache in computer system. Also explain how a computer works with a neat and clean diagram. What is a ALU, CU and Cache in computer system. Also explain how a computer works with a neat and clean diagram."
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:text="What is a ALU, CU and Cache in computer system."
                 android:textSize="20sp" />
 
             <android.support.v7.widget.CardView
@@ -167,81 +172,109 @@
                     android:foreground="?android:attr/selectableItemBackground"/>
             </android.support.v7.widget.CardView>
 
-            <!-- <RadioGroup
-                android:id="@+id/radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/quiz_option_underline" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_a"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option A"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/quiz_option_underline" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option B"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/quiz_option_underline" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_c"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/icon_wrong_answer"
-                    android:padding="10dp"
-                    android:text="option C"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/quiz_option_underline" />
-
-                <RadioButton
-                    android:id="@+id/radio_button_d"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/icon_correct_answer"
-                    android:padding="10dp"
-                    android:text="option D"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/quiz_option_underline" />
-            </RadioGroup>-->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:scrollbars="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_total_views"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1K"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:id="@+id/like_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_like_not_pressed"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1K"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:id="@+id/unlike_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_unlike_not_pressed"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1K"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:id="@+id/share_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_share_not_pressed"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1K"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:id="@+id/comment_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/icon_comment_not_pressed"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1K"/>
+                    </LinearLayout>
+                </LinearLayout>
                <LinearLayout
+                   android:id="@+id/comment_linear_layout"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:orientation="horizontal"
-                   android:gravity="center_vertical">
+                   android:gravity="center_vertical"
+                   android:visibility="visible">
                    <de.hdodenhof.circleimageview.CircleImageView
                        android:layout_width="50dp"
                        android:layout_height="50dp"
@@ -270,7 +303,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
@@ -278,16 +314,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/icon_previous_button"
+            android:background="@color/colorPrimaryDark"
+            android:drawableLeft="@drawable/icon_prev_ques"
+            android:textColor="#ffffff"
             android:text="Prev"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:id="@+id/button_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/icon_next_button"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:drawableRight="@drawable/icon_next_ques"
+            android:textColor="#ffffff"
             android:text="Next"
             android:textSize="20sp" />
     </LinearLayout>
