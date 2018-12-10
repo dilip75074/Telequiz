@@ -307,7 +307,6 @@ class QuestionDataListAdapter extends ArrayAdapter<QuestionData> {
     }
 
     private void editQuestion(final int position) {
-        //getting the hero of the specified position
         final QuestionData qData = questionDataList.get(position);
 
         ScrollView scrollView = new ScrollView(context);

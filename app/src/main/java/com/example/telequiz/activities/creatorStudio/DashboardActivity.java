@@ -13,14 +13,13 @@ import com.example.telequiz.R;
 import com.example.telequiz.activities.creatorStudio.channel.channelAnalytics.ChannelAnalyticsActivity;
 import com.example.telequiz.activities.creatorStudio.uploadQuestion.UploadQuestionActivity;
 import com.example.telequiz.activities.home.MainActivity;
+import com.example.telequiz.services.OverflowMenuManager;
 
 public class DashboardActivity extends AppCompatActivity {
 
     Context context;
     CardView buttonSetNewQuiz, buttonFullAnalytics, buttonRevenueReports,
                 buttonAllSubscribers, buttonAllViews, buttonAllLikes, buttonAllShares;
-
-    Menu menu;
 
     String currency = "INR";
 
@@ -115,12 +114,11 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
+        OverflowMenuManager overflowMenu = new OverflowMenuManager(menu);
 
-        menu.setGroupVisible(R.id.main_activity_menu_group, false);
-        menu.setGroupVisible(R.id.creator_studio_menu_group, true);
-
+        overflowMenu.showGroup(R.id.creator_studio_menu_group);
+        overflowMenu.hideItem(R.id.app_bar_search);
         return super.onCreateOptionsMenu(menu);
     }
 

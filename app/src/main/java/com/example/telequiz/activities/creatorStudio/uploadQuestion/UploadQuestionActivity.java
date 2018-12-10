@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,7 +29,6 @@ public class UploadQuestionActivity extends AppCompatActivity {
     RadioGroup gooleWorksheetNameRadioGroup;
     RadioButton defaultWorksheetNameRadioButton, customeWorksheetNameRadioButton;
     Button loadQuestionButton, clearFieldButton;
-    ProgressBar progressBar;
     Constant c;
 
     @Override
@@ -96,8 +94,7 @@ public class UploadQuestionActivity extends AppCompatActivity {
         final String scriptURL = scriptBaseUrl + "id=" + googleSheetId + "&sheet=" + googleSheetName;
 
         enableUserInteraction(false);
-
-        ConnectionManager.volleyStringRequest(context, true, progressBar, scriptURL, new VolleyResponse() {
+        ConnectionManager.volleyStringRequest(context, true, null, scriptURL, new VolleyResponse() {
             @Override
             public void onResponse(String _response) {
                 enableUserInteraction(true);
@@ -161,14 +158,13 @@ public class UploadQuestionActivity extends AppCompatActivity {
     }
 
     private void initAllComponents() {
-        context = getApplicationContext();
+        context = this;
         linkKnowMore = findViewById(R.id.link_know_more);
         googleSheetIdText = findViewById(R.id.input_google_spreadsheet_id);
         googleWorksheetNameText =findViewById(R.id.input_google_worksheet_name);
         gooleWorksheetNameRadioGroup = findViewById(R.id.google_sheet_name_radio_group);
         loadQuestionButton = findViewById(R.id.btn_load_question);
         clearFieldButton = findViewById(R.id.btn_field_clear);
-        progressBar = findViewById(R.id.progressBar);
         customeWorksheetNameRadioButton = findViewById(R.id.google_sheet_name_custom_radio_button);
         defaultWorksheetNameRadioButton = findViewById(R.id.google_sheet_name_default_radio_button);
     }

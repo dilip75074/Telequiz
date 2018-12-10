@@ -9,10 +9,14 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -26,23 +30,24 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="1/10"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="right">
+                android:layout_gravity="right"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/timer_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Time left: 1:59"
+                    android:text=""
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
+
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -50,64 +55,92 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
+                    android:layout_marginTop="-15dp"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="1"
-                    android:layout_marginTop="-15dp"
+                    android:minWidth="200dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:minWidth="200dp"
-                    android:progressTint="#07f22e"/>
+                    android:progress="1"
+                    android:progressTint="#07f22e" />
 
             </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
-    <ListView
-        android:id="@+id/quiz_question_list"
+
+    <ScrollView
+        android:id="@+id/question_no_container_scrollbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scrollbars="vertical"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        android:paddingBottom="8dp"
+        android:background="@color/backgroundcolor"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/navigation_button_container"
         app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <GridLayout
+            android:id="@+id/jump_to_question_grid_layout_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/background_light"
+            android:columnCount="4"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:scrollbars="vertical">
+        </GridLayout>
+    </ScrollView>
+
+    <ListView
+    android:id="@+id/quiz_question_list"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:scrollbars="vertical"
+    android:layout_marginBottom="8dp"
+    app:layout_constraintBottom_toTopOf="@+id/navigation_button_container"
+    app:layout_constraintTop_toBottomOf="@+id/appbar">
 
     </ListView>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+        android:id="@+id/navigation_button_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="5dp"
+        android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/button_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@color/colorPrimaryDark"
             android:drawableLeft="@drawable/icon_prev_ques"
-            android:textColor="#ffffff"
-            android:text="Prev"
-            android:textSize="20sp"
             android:padding="10dp"
-            android:layout_marginRight="5dp"/>
+            android:text="Prev"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:padding="10dp"
+            android:layout_weight="1"
             android:background="@color/colorPrimaryDark"
             android:drawableRight="@drawable/icon_next_ques"
-            android:textColor="#ffffff"
+            android:padding="10dp"
             android:text="Next"
+            android:textColor="#ffffff"
             android:textSize="20sp" />
     </LinearLayout>
 

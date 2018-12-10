@@ -65,6 +65,17 @@ public class Constant {
     public static final String OPTION_C = "option_c";
     public static final String OPTION_D = "option_d";
     public static final String CORRECT_OPTION = "correct_option";
+    public static final String USER_OPTION = "user_option";
+    public static final int VERY_FIRST_QUIZ_QUESTION = 1;
+    public static final int QUIZ_ANIMATION_TYPE_LEFT_TO_RIGHT = 1;
+    public static final int QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT = 2;
+    public static final int QUIZ_ANIMATION_TYPE_NONE = 3;
+    public static final String TOTAL_VIEWS = "total_views";
+    public static final String TOTAL_LIKES = "total_likes";
+    public static final String TOTAL_UNLIKES = "total_unlikes";
+    public static final String TOTAL_SHARES = "total_shares";
+    public static final String TOTAL_COMMENTS = "total_comments";
+    public static final String COMMENTS = "comments";
 
     /*
      * Keys to pass value from one activity to another

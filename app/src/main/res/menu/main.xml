@@ -9,6 +9,7 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
+    <!--Home: Main activity-->
     <group
         android:id="@+id/main_activity_menu_group">
         <item
@@ -32,6 +33,32 @@
             android:id="@+id/channel_settings_menu"
             android:orderInCategory="103"
             android:title="Channel Settings" />
+    </group>
 
+    <!--Play quiz Activity-->
+    <group
+        android:id="@+id/play_quiz_menu_group">
+
+        <item
+            android:id="@+id/jump_to_question_menu"
+            android:orderInCategory="104"
+            android:title="Go"
+            android:icon="@drawable/icon_jump_to_question_white"
+            app:showAsAction="always"/>
+
+        <item
+            android:id="@+id/enable_sound_menu"
+            android:orderInCategory="105"
+            android:title="Sound" />
+
+        <item
+            android:id="@+id/enable_vibration_menu"
+            android:orderInCategory="106"
+            android:title="Vibration" />
+
+        <item
+            android:id="@+id/play_quiz_more_setting_menu"
+            android:orderInCategory="107"
+            android:title="More Settings..." />
     </group>
 </menu>

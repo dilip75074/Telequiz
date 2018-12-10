@@ -29,7 +29,9 @@ import com.example.telequiz.activities.creatorStudio.DashboardActivity;
 import com.example.telequiz.activities.home.fragments.MainPagerAdapter;
 import com.example.telequiz.R;
 import com.example.telequiz.activities.quiz.PlayQuizActivity;
+import com.example.telequiz.activities.sdkPermission.SdkPermissionManagerActivity;
 import com.example.telequiz.services.AppUpdateChecker;
+import com.example.telequiz.services.OverflowMenuManager;
 import com.example.telequiz.services.SessionManager;
 import com.example.telequiz.services.utilities.Message;
 
@@ -93,10 +95,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        OverflowMenuManager overflowMenu = new OverflowMenuManager(menu);
 
-        menu.setGroupVisible(R.id.main_activity_menu_group, true);
-        menu.setGroupVisible(R.id.creator_studio_menu_group, false);
-
+        overflowMenu.showGroup(R.id.main_activity_menu_group);
+        overflowMenu.showItem(R.id.app_bar_search);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(context, SdkPermissionManagerActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -171,11 +175,12 @@ public class MainActivity extends AppCompatActivity
     {
         e.printStackTrace(); // not all Android versions will print the stack trace automatically
         Message.message(context, "Fatal Error found !");
-        System.exit(1); // kill off the crashed app
+
+        //System.exit(1); // kill off the crashed app
     }
 
     public void goForLogin(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         startActivity(intent);
         drawer.closeDrawer(GravityCompat.START);
     }
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.mainViewPager);
         mTabLayout = (TabLayout) findViewById(R.id.mainTabLayout); // get the reference of TabLayout
         navigationView = findViewById(R.id.nav_view);
-        context = getApplicationContext();
+        context = this;
         session = new SessionManager(context);
 
         new AppUpdateChecker(this).notifyUserIfAnUpdate();

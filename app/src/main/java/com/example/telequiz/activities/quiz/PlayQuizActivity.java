@@ -1,13 +1,23 @@
 package com.example.telequiz.activities.quiz;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -15,15 +25,20 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.example.telequiz.R;
+import com.example.telequiz.activities.home.MainActivity;
+import com.example.telequiz.services.OverflowMenuManager;
 import com.example.telequiz.services.utilities.Constant;
+import com.example.telequiz.services.utilities.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import io.gloxey.gnm.interfaces.VolleyResponse;
 import io.gloxey.gnm.managers.ConnectionManager;
@@ -31,7 +46,6 @@ import io.gloxey.gnm.managers.ConnectionManager;
 public class PlayQuizActivity extends AppCompatActivity {
 
     Context context;
-
     ProgressBar progressBar;
 
     ScrollView mainQuizScrollView;
@@ -41,19 +55,23 @@ public class PlayQuizActivity extends AppCompatActivity {
 
     TextView timerTextView, quizQuestionTextView, quesNoTextView;
 
+    LinearLayout navButtonContainer;
+    ScrollView gridLayoutScroller;
+    GridLayout gridLayout;
+
     ListView quizQuestionListView;
 
-    private static int quesNo = 1;
+    public static List<QuizDataModel> quizDataList = new ArrayList<>();
+    public static int quesNo = 1;
+    private int totalQuestion;
     QuizDataListAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initAllComponents();
-        fetchQuestions("https://script.googleusercontent.com/macros/echo?user_content_key=Q1pY--ZDRt0Uvzwqyy4N2pTv1mF21tpmA5hfDLBb6Cwq_umMHIampOyIcmSxHG2PB7Zf4hgfMQBAo75Oks4Dk5X8Wi2p2dN1OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa5V7SzAZj2xBfFDRtNxpfsmuqfjnOYLBpWrI3G8IWJh29l4LSossvEa_fiNHZ0znxEBErwHi9mmiKsGjjxV69g1lj0UBDMnlBbQK1FmJT9l4MvA28FQO80k4mrHdASoCwoPJ_1nI_0tywqJbeTowOR_fVIgxkfofiQ&lib=M7OO09pfGNQD9igEAo4bouJoiE_6Oxspk");
-        setTimer(0, 1, 0);
+        fetchQuestions("https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?id=1f74jia8lVqijhy_wVAdd5jliv54-oMBJjpAe9MIulfs&sheet=Sheet1");
         /*
          * Next quiz
          * */
@@ -62,70 +80,82 @@ public class PlayQuizActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.button_next);
 
         /*
-        * Previous quiz
-        * */
-       // this.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
+         * Previous quiz
+         * */
+        // this.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
 
     }
 
-   /* private void animateRightToLeftEntry(final View childView, View containerView) {
-//        final View childView = findViewById(R.id.quiz_question);
-//        View containerView = findViewById(R.id.quiz_container);
-        childView.setTranslationX(containerView.getWidth());
-        long TRANSLATION_DURATION = 1000;
-        childView.animate()
-                .translationXBy(-containerView.getWidth())
-                .setDuration(TRANSLATION_DURATION)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        childView.setVisibility(View.VISIBLE);
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure you want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        startActivity(intent);
                     }
-                });
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
-    private void animateLeftToRightEntry(final View childView, View containerView) {
-//        final View childView = findViewById(R.id.quiz_question);
-//        View containerView = findViewById(R.id.quiz_container);
-        childView.setTranslationX(-containerView.getWidth());
-        long TRANSLATION_DURATION = 1000;
-        childView.animate()
-                .translationXBy(containerView.getWidth())
-                .setDuration(TRANSLATION_DURATION)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        childView.setVisibility(View.VISIBLE);
-                    }
-                });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        OverflowMenuManager overflowMenu = new OverflowMenuManager(menu);
+
+        overflowMenu.showGroup(R.id.play_quiz_menu_group);
+        overflowMenu.hideItem(R.id.app_bar_search);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    private void animateRightToLeftExit() {
-        final View childView = findViewById(R.id.quiz_question);
-        View containerView = findViewById(R.id.quiz_container);
-        long TRANSLATION_DURATION = 1000;
-        childView.animate()
-                .translationXBy(-containerView.getWidth())
-                .setDuration(TRANSLATION_DURATION)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        childView.setVisibility(View.GONE);
-                    }
-                });
-    }*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.jump_to_question_menu) {
+            onJumpToQuestionMenuSelected();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onJumpToQuestionMenuSelected() {
+        if(gridLayoutScroller.getVisibility() == View.VISIBLE) {
+            gridLayoutScroller.setVisibility(View.GONE);
+            return;
+        }
+        gridLayoutScroller.setVisibility(View.VISIBLE);
+    }
+
+    private void jumpToQuestionNo(int buttonId) {
+        Log.i("DK Button clicked: ", String.valueOf(buttonId));
+        gridLayoutScroller.setVisibility(View.GONE);
+        quesNo = buttonId + 1; // quesNo = 1
+        if (quesNo == totalQuestion) {
+            nextButton.setText("Finish");
+        } else {
+            nextButton.setText("Next");
+        }
+        displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT); //displaying very first question
+    }
 
     private void setTimer(final int durationInHour, int durationInMinute, int durationInSecond) {
         int durationInMilli = durationInHour * 60 * 60 * 1000;
         durationInMilli += durationInMinute * 60 * 1000;
-        durationInMilli += durationInMinute * 1000;
+        durationInMilli += durationInSecond * 1000;
 
         final int[] progress = {durationInMilli};
         progressBar.setMax(progress[0]);
         progressBar.setProgress(progress[0]);
+
+        final long[] elapsedHours = new long[1];
+        final long[] elapsedMinutes = new long[1];
+        final long[] elapsedSeconds = new long[1];
 
         countDownTimer = new CountDownTimer(durationInMilli, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -133,19 +163,19 @@ public class PlayQuizActivity extends AppCompatActivity {
                 long minutesInMilli = secondsInMilli * 60;
                 long hoursInMilli = minutesInMilli * 60;
 
-                long elapsedHours = millisUntilFinished / hoursInMilli;
+                elapsedHours[0] = millisUntilFinished / hoursInMilli;
                 millisUntilFinished = millisUntilFinished % hoursInMilli;
 
-                long elapsedMinutes = millisUntilFinished / minutesInMilli;
+                elapsedMinutes[0] = millisUntilFinished / minutesInMilli;
                 millisUntilFinished = millisUntilFinished % minutesInMilli;
 
-                long elapsedSeconds = millisUntilFinished / secondsInMilli;
+                elapsedSeconds[0] = millisUntilFinished / secondsInMilli;
 
                 String timerText = "";
-                if (durationInHour > 0)
-                    timerText = String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+                if (elapsedHours[0] > 0)
+                    timerText = String.format("%02d:%02d:%02d", elapsedHours[0], elapsedMinutes[0], elapsedSeconds[0]);
                 else
-                    timerText = String.format("%02d:%02d", elapsedMinutes, elapsedSeconds);
+                    timerText = String.format("%02d:%02d", elapsedMinutes[0], elapsedSeconds[0]);
                 timerTextView.setText("Time Left: " + timerText);
 
                 progress[0] -= 1000;
@@ -164,7 +194,7 @@ public class PlayQuizActivity extends AppCompatActivity {
 
             public void onFinish() {
                 String timerText = "";
-                if (durationInHour > 0)
+                if (elapsedHours[0] > 0)
                     timerText = "00:00:00";
                 else
                     timerText = "00:00";
@@ -193,14 +223,27 @@ public class PlayQuizActivity extends AppCompatActivity {
     };
 
     private void onPreviousButtonClick() {
+        if (quesNo > 1) {
+            quesNo--;
+            nextButton.setText("Next");
+            displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_LEFT_TO_RIGHT);
+        }
     }
 
     private void onNextButtonClick() {
-
+        if (quesNo < totalQuestion) {
+            quesNo++;
+            if (quesNo == totalQuestion) {
+                nextButton.setText("Finish");
+            } else {
+                nextButton.setText("Next");
+            }
+            displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT);
+        }
     }
 
     private void fetchQuestions(String _url) {
-        ConnectionManager.volleyStringRequest(this, false, null, _url, new VolleyResponse() {
+        ConnectionManager.volleyStringRequest(this, true, null, _url, new VolleyResponse() {
             @Override
             public void onResponse(String response) {
                 /**
@@ -219,6 +262,9 @@ public class PlayQuizActivity extends AppCompatActivity {
                 /**
                  * handle Volley Error
                  */
+                Message.message(context, "Couldn't connect to Server");
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -227,6 +273,11 @@ public class PlayQuizActivity extends AppCompatActivity {
                 /**
                  * True if internet is connected otherwise false
                  */
+                if(!connected) {
+                    Message.message(context, "Couldn't connect to Internet");
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -235,7 +286,6 @@ public class PlayQuizActivity extends AppCompatActivity {
         JSONObject obj = new JSONObject(quizQuestions);
         JSONArray m_jArry = obj.getJSONArray("records");
 
-        List<QuizDataModel> quizDataList = new ArrayList<>();
         HashMap<String, String> m_li;
 
         for (int i = 0; i < m_jArry.length(); i++) {
@@ -247,6 +297,13 @@ public class PlayQuizActivity extends AppCompatActivity {
             String optionCEnglish = !json_inside.getString(Constant.OPTION_C).isEmpty() ? json_inside.getString(Constant.OPTION_C) : null;
             String optionDEnglish = !json_inside.getString(Constant.OPTION_D).isEmpty() ? json_inside.getString(Constant.OPTION_D) : null;
             String correctOption = !json_inside.getString(Constant.CORRECT_OPTION).isEmpty() ? json_inside.getString(Constant.CORRECT_OPTION) : null;
+            String userOption = !json_inside.getString(Constant.USER_OPTION).isEmpty() ? json_inside.getString(Constant.USER_OPTION) : null;
+            String totalViews = !json_inside.getString(Constant.TOTAL_VIEWS).isEmpty() ? json_inside.getString(Constant.TOTAL_VIEWS) : null;
+            String totalLikes = !json_inside.getString(Constant.TOTAL_LIKES).isEmpty() ? json_inside.getString(Constant.TOTAL_LIKES) : null;
+            String totalUnlikes = !json_inside.getString(Constant.TOTAL_UNLIKES).isEmpty() ? json_inside.getString(Constant.TOTAL_UNLIKES) : null;
+            String totalShares = !json_inside.getString(Constant.TOTAL_SHARES).isEmpty() ? json_inside.getString(Constant.TOTAL_SHARES) : null;
+            String totalComments = !json_inside.getString(Constant.TOTAL_COMMENTS).isEmpty() ? json_inside.getString(Constant.TOTAL_COMMENTS) : null;
+            String comments = !json_inside.getString(Constant.COMMENTS).isEmpty() ? json_inside.getString(Constant.COMMENTS) : null;
 
             m_li = new HashMap<String, String>();
             m_li.put(Constant.SL_NO, sNo);
@@ -256,21 +313,90 @@ public class PlayQuizActivity extends AppCompatActivity {
             m_li.put(Constant.OPTION_C, optionCEnglish);
             m_li.put(Constant.OPTION_D, optionDEnglish);
             m_li.put(Constant.CORRECT_OPTION, correctOption);
+            m_li.put(Constant.USER_OPTION, userOption);
+            m_li.put(Constant.TOTAL_VIEWS, totalViews);
+            m_li.put(Constant.TOTAL_LIKES, totalLikes);
+            m_li.put(Constant.TOTAL_UNLIKES, totalUnlikes);
+            m_li.put(Constant.TOTAL_SHARES, totalShares);
+            m_li.put(Constant.TOTAL_COMMENTS, totalComments);
+            m_li.put(Constant.COMMENTS, comments);
 
             quizDataList.add(new QuizDataModel(m_li));
         }
 
+        Collections.shuffle(quizDataList, new Random(System.nanoTime()));
+        navButtonContainer.setVisibility(View.VISIBLE);
+        totalQuestion = quizDataList.size();
+        addQuestionNoButtonToGridLayout();
+        setTimer(0, 90, 0);
+        quesNo = Constant.VERY_FIRST_QUIZ_QUESTION; // quesNo = 1
+        displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT); //displaying very first question
+    }
+
+    private void reviewAllQuestions() {
+        int animationType = Constant.QUIZ_ANIMATION_TYPE_NONE;
         //creating the adapter
-        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_qestion_list, quizDataList);
+        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizDataList, animationType );
 
         //attaching adapter to the listview
         quizQuestionListView.setAdapter(adapter);
     }
 
+    private void addQuestionNoButtonToGridLayout() {
+
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int noOfColumns = (int) (dpWidth / 80);
+        gridLayout.setColumnCount(noOfColumns);
+
+        Button mButton[] = new Button[totalQuestion];
+        for(int i = 0; i < totalQuestion; i++) {
+            mButton[i] = new Button(context);
+            mButton[i].setText(String.valueOf(i+1));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(110, 110);
+            params.setMargins(5,5,5,5);
+            mButton[i].setLayoutParams(params);
+            mButton[i].setTag(i);
+
+            //Question not attempted
+            mButton[i].setTextColor(getResources().getColor(R.color.black));
+            mButton[i].setBackgroundResource(R.drawable.circle_background_3d_gray);
+
+            //Question attempted
+
+            if(i%5 == 0) {
+                mButton[i].setBackgroundResource(R.drawable.circle_background_3d_green);
+               // mButton[i].setTextColor(getResources().getColor(R.color.white));
+            }
+
+            mButton[i].setTypeface(null, Typeface.BOLD);
+            mButton[i].setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    int mButton_id = Integer.parseInt(v.getTag().toString().trim());
+                    jumpToQuestionNo(mButton_id);
+                }
+            });
+            gridLayout.addView(mButton[i]);
+        }
+    }
+
+    private void displayQuestion(int quesNo, int animationType) {
+        List<QuizDataModel> quizSingleQuestionData = new ArrayList<>();
+        quizSingleQuestionData.add(quizDataList.get(quesNo-1));
+        //creating the adapter
+        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizSingleQuestionData, animationType);
+
+        //attaching adapter to the listview
+        quizQuestionListView.setAdapter(adapter);
+        quesNoTextView.setText(quesNo +"/" + totalQuestion);
+    }
+
     private void initAllComponents() {
         setContentView(R.layout.activity_play_quiz);
         setTitle("Revision Classes");
-        
+
         context = this;
 
         mainQuizScrollView = findViewById(R.id.mainQuizScrollView);
@@ -287,5 +413,11 @@ public class PlayQuizActivity extends AppCompatActivity {
 
         nextButton = findViewById(R.id.button_next);
         nextButton.setOnClickListener(onClickListener);
+
+        navButtonContainer = findViewById(R.id.navigation_button_container);
+        navButtonContainer.setVisibility(View.GONE);
+
+        gridLayoutScroller = findViewById(R.id.question_no_container_scrollbar);
+        gridLayout = findViewById(R.id.jump_to_question_grid_layout_container);
     }
 }

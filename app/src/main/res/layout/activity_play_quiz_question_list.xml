@@ -29,85 +29,89 @@
                 android:text="What is a ALU, CU and Cache in computer system."
                 android:textSize="20sp" />
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/option_a_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <RadioButton
-                    android:id="@+id/radio_button_a"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/option_a_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option A"
-                    android:textSize="20sp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
                     android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"/>
-            </android.support.v7.widget.CardView>
+                    android:foreground="?android:attr/selectableItemBackground">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/option_b_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+                    <CheckBox
+                        android:id="@+id/option_check_box_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="option A"
+                        android:textSize="20sp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton"/>
+                </android.support.v7.widget.CardView>
 
-                <RadioButton
-                    android:id="@+id/radio_button_b"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/option_b_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option B"
-                    android:textSize="20sp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
                     android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"/>
-            </android.support.v7.widget.CardView>
+                    android:foreground="?android:attr/selectableItemBackground">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/option_c_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+                    <CheckBox
+                        android:id="@+id/option_check_box_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="option B"
+                        android:textSize="20sp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton"/>
+                </android.support.v7.widget.CardView>
 
-                <RadioButton
-                    android:id="@+id/radio_button_c"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/option_c_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option C"
-                    android:textSize="20sp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
                     android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"/>
-            </android.support.v7.widget.CardView>
+                    android:foreground="?android:attr/selectableItemBackground">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/option_d_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground">
+                    <CheckBox
+                        android:id="@+id/option_check_box_c"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="option C"
+                        android:textSize="20sp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton"/>
+                </android.support.v7.widget.CardView>
 
-                <RadioButton
-                    android:id="@+id/radio_button_d"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/option_d_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="option D"
-                    android:textSize="20sp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
                     android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"/>
-            </android.support.v7.widget.CardView>
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <CheckBox
+                        android:id="@+id/option_check_box_d"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="option D"
+                        android:textSize="20sp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        style="@android:style/Widget.DeviceDefault.Light.CompoundButton.RadioButton" />
+                </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,6 +136,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/icon_total_views"/>
                         <TextView
+                            android:id="@+id/total_views_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1K"/>
@@ -149,6 +154,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/icon_like_not_pressed"/>
                         <TextView
+                            android:id="@+id/total_likes_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1K"/>
@@ -166,6 +172,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/icon_unlike_not_pressed"/>
                         <TextView
+                            android:id="@+id/total_unlikes_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1K"/>
@@ -183,6 +190,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/icon_share_not_pressed"/>
                         <TextView
+                            android:id="@+id/total_shares_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1K"/>
@@ -200,6 +208,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/icon_comment_not_pressed"/>
                         <TextView
+                            android:id="@+id/total_comments_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1K"/>
