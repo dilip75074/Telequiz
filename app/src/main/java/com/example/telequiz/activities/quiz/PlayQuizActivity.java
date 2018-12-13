@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -48,21 +50,26 @@ public class PlayQuizActivity extends AppCompatActivity {
     Context context;
     ProgressBar progressBar;
 
-    ScrollView mainQuizScrollView;
+    //ScrollView mainQuizScrollView;
     CountDownTimer countDownTimer = null;
 
-    Button nextButton, previousButton;
+    Button nextButton, previousButton, reviewCloseButton;
 
     TextView timerTextView, quizQuestionTextView, quesNoTextView;
+    TextView totalAttemptedTextView, totalNotAttemptedTextView;
 
     LinearLayout navButtonContainer;
     ScrollView gridLayoutScroller;
     GridLayout gridLayout;
 
+    ImageButton scrollToTopButton;
     ListView quizQuestionListView;
 
-    public static List<QuizDataModel> quizDataList = new ArrayList<>();
+    public static List<QuizDataModel> quizDataList;
+    public static String mode;
+    public static List<Button> quizQuestionStatusButtonList;
     public static int quesNo = 1;
+    public static int totalAttempted = 0;
     private int totalQuestion;
     QuizDataListAdapter adapter;
 
@@ -84,10 +91,51 @@ public class PlayQuizActivity extends AppCompatActivity {
          * */
         // this.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
 
+        scrollToTopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quizQuestionListView.setSelection(1);
+                quizQuestionListView.smoothScrollToPosition(0);
+            }
+        });
+
+        quizQuestionListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if(firstVisibleItem  > 1) {
+                    scrollToTopButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    scrollToTopButton.setVisibility(View.GONE);
+                }
+                if(mLastFirstVisibleItem<firstVisibleItem) {
+                    Log.i("DK SCROLLING DOWN","TRUE");
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem) {
+                    Log.i("DK SCROLLING UP","TRUE");
+                }
+                mLastFirstVisibleItem=firstVisibleItem;
+            }
+        });
+
     }
 
     @Override
     public void onBackPressed() {
+        if(gridLayoutScroller.getVisibility() == View.VISIBLE) {
+            gridLayoutScroller.setVisibility(View.GONE);
+            return;
+        }
+
         new AlertDialog.Builder(this)
                 .setTitle("Are you sure you want to exit?")
                 .setCancelable(false)
@@ -97,6 +145,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
+
                 .setNegativeButton("No", null)
                 .show();
     }
@@ -120,6 +169,17 @@ public class PlayQuizActivity extends AppCompatActivity {
             onJumpToQuestionMenuSelected();
             return true;
         }
+        else  if(id == R.id.change_mode_of_exam_menu) {
+            boolean isChecked = item.isChecked();
+
+            if(isChecked)
+                mode = Constant.MODE_EXAM;
+            else
+                mode = Constant.MODE_PRACTICE;
+
+            item.setChecked(!isChecked);
+            displayQuestion(quesNo);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -129,19 +189,33 @@ public class PlayQuizActivity extends AppCompatActivity {
             gridLayoutScroller.setVisibility(View.GONE);
             return;
         }
+
         gridLayoutScroller.setVisibility(View.VISIBLE);
+        totalAttemptedTextView.setText(String.valueOf(totalAttempted));
+        totalNotAttemptedTextView.setText(String.valueOf(totalQuestion - totalAttempted));
     }
 
     private void jumpToQuestionNo(int buttonId) {
-        Log.i("DK Button clicked: ", String.valueOf(buttonId));
         gridLayoutScroller.setVisibility(View.GONE);
         quesNo = buttonId + 1; // quesNo = 1
-        if (quesNo == totalQuestion) {
-            nextButton.setText("Finish");
-        } else {
-            nextButton.setText("Next");
+
+        if(mode.toLowerCase().equals(Constant.MODE_REVIEW)) {
+            quizQuestionListView.setSelection(quesNo - 1);
+            if(quesNo > 2) {
+                scrollToTopButton.setVisibility(View.VISIBLE);
+            }
+            else {
+                scrollToTopButton.setVisibility(View.GONE);
+            }
         }
-        displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT); //displaying very first question
+        else {
+            if (quesNo == totalQuestion) {
+                nextButton.setText("Finish");
+            } else {
+                nextButton.setText("Next");
+            }
+            displayQuestion(quesNo); //displaying very first question
+        }
     }
 
     private void setTimer(final int durationInHour, int durationInMinute, int durationInSecond) {
@@ -218,6 +292,9 @@ public class PlayQuizActivity extends AppCompatActivity {
                 case R.id.button_next:
                     onNextButtonClick();
                     break;
+                case R.id.button_review_close:
+                    onReviewCloseButtonClick();
+                    break;
             }
         }
     };
@@ -226,11 +303,14 @@ public class PlayQuizActivity extends AppCompatActivity {
         if (quesNo > 1) {
             quesNo--;
             nextButton.setText("Next");
-            displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_LEFT_TO_RIGHT);
+            displayQuestion(quesNo);
         }
     }
 
     private void onNextButtonClick() {
+        if(nextButton.getText().toString().toUpperCase().equals("FINISH"))
+            onFinishButtonClick();
+
         if (quesNo < totalQuestion) {
             quesNo++;
             if (quesNo == totalQuestion) {
@@ -238,8 +318,17 @@ public class PlayQuizActivity extends AppCompatActivity {
             } else {
                 nextButton.setText("Next");
             }
-            displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT);
+            displayQuestion(quesNo);
         }
+    }
+
+    private void onFinishButtonClick() {
+        reviewAllQuestions();
+    }
+
+    private void onReviewCloseButtonClick() {
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
     }
 
     private void fetchQuestions(String _url) {
@@ -330,13 +419,22 @@ public class PlayQuizActivity extends AppCompatActivity {
         addQuestionNoButtonToGridLayout();
         setTimer(0, 90, 0);
         quesNo = Constant.VERY_FIRST_QUIZ_QUESTION; // quesNo = 1
-        displayQuestion(quesNo, Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT); //displaying very first question
+        displayQuestion(quesNo); //displaying very first question
     }
 
     private void reviewAllQuestions() {
-        int animationType = Constant.QUIZ_ANIMATION_TYPE_NONE;
+        //quesNo = 1;
+        mode = Constant.MODE_REVIEW;
+        previousButton.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+        reviewCloseButton.setVisibility(View.VISIBLE);
         //creating the adapter
-        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizDataList, animationType );
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizDataList);
 
         //attaching adapter to the listview
         quizQuestionListView.setAdapter(adapter);
@@ -348,29 +446,23 @@ public class PlayQuizActivity extends AppCompatActivity {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int noOfColumns = (int) (dpWidth / 80);
         gridLayout.setColumnCount(noOfColumns);
-
-        Button mButton[] = new Button[totalQuestion];
+        gridLayout.removeAllViews();
+        quizQuestionStatusButtonList.clear();
+//        Button mButton[] = new Button[totalQuestion];
         for(int i = 0; i < totalQuestion; i++) {
-            mButton[i] = new Button(context);
-            mButton[i].setText(String.valueOf(i+1));
+            Button mButton = new Button(context);
+            mButton.setText(String.valueOf(i+1));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(110, 110);
             params.setMargins(5,5,5,5);
-            mButton[i].setLayoutParams(params);
-            mButton[i].setTag(i);
+            mButton.setLayoutParams(params);
+            mButton.setTag(i);
 
-            //Question not attempted
-            mButton[i].setTextColor(getResources().getColor(R.color.black));
-            mButton[i].setBackgroundResource(R.drawable.circle_background_3d_gray);
+            // Initially no questions are attempted
+            mButton.setTextColor(getResources().getColor(R.color.black));
+            mButton.setBackgroundResource(R.drawable.circle_background_3d_gray);
 
-            //Question attempted
-
-            if(i%5 == 0) {
-                mButton[i].setBackgroundResource(R.drawable.circle_background_3d_green);
-               // mButton[i].setTextColor(getResources().getColor(R.color.white));
-            }
-
-            mButton[i].setTypeface(null, Typeface.BOLD);
-            mButton[i].setOnClickListener(new View.OnClickListener() {
+            mButton.setTypeface(null, Typeface.BOLD);
+            mButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -378,15 +470,16 @@ public class PlayQuizActivity extends AppCompatActivity {
                     jumpToQuestionNo(mButton_id);
                 }
             });
-            gridLayout.addView(mButton[i]);
+            quizQuestionStatusButtonList.add(mButton);
+            gridLayout.addView(quizQuestionStatusButtonList.get(i));
         }
     }
 
-    private void displayQuestion(int quesNo, int animationType) {
+    private void displayQuestion(int quesNo) {
         List<QuizDataModel> quizSingleQuestionData = new ArrayList<>();
         quizSingleQuestionData.add(quizDataList.get(quesNo-1));
         //creating the adapter
-        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizSingleQuestionData, animationType);
+        adapter = new QuizDataListAdapter(this, R.layout.activity_play_quiz_question_list, quizSingleQuestionData);
 
         //attaching adapter to the listview
         quizQuestionListView.setAdapter(adapter);
@@ -398,14 +491,21 @@ public class PlayQuizActivity extends AppCompatActivity {
         setTitle("Revision Classes");
 
         context = this;
+        quizDataList = new ArrayList<>();
+        quizQuestionStatusButtonList = new ArrayList<>();
+        mode = Constant.MODE_PRACTICE;
 
-        mainQuizScrollView = findViewById(R.id.mainQuizScrollView);
+        //mainQuizScrollView = findViewById(R.id.mainQuizScrollView);
 
         progressBar = findViewById(R.id.progressBar);
 
         quesNoTextView = findViewById(R.id.ques_no);
         timerTextView = findViewById(R.id.timer_text_view);
         quizQuestionTextView = findViewById(R.id.quiz_question);
+
+        totalAttemptedTextView = findViewById(R.id.total_attmpted_text);
+        totalAttempted = 0;
+        totalNotAttemptedTextView = findViewById(R.id.total_not_attmpted_text);
 
         quizQuestionListView = findViewById(R.id.quiz_question_list);
         previousButton = findViewById(R.id.button_previous);
@@ -414,8 +514,13 @@ public class PlayQuizActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.button_next);
         nextButton.setOnClickListener(onClickListener);
 
+        reviewCloseButton = findViewById(R.id.button_review_close);
+        reviewCloseButton.setOnClickListener(onClickListener);
+
         navButtonContainer = findViewById(R.id.navigation_button_container);
         navButtonContainer.setVisibility(View.GONE);
+
+        scrollToTopButton = findViewById(R.id.button_scroll_to_top);
 
         gridLayoutScroller = findViewById(R.id.question_no_container_scrollbar);
         gridLayout = findViewById(R.id.jump_to_question_grid_layout_container);

@@ -13,15 +13,16 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
 import com.example.telequiz.services.utilities.Constant;
+import com.example.telequiz.services.utilities.SoundManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,7 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
 
     Button nextButton, previousButton;
 
-    TextView timerTextView, quizQuestionTextView, quesNoTextView;
+    TextView quizQuestionTextView, quesNoOnReviewModeTextView;
 
     LinearLayout commentLinearLayout, quizContainerLayout;
 
@@ -54,17 +55,14 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
 
     boolean isLikeButtonPressed, isUnlikeButtonPressed;
 
-    int animationType;
-
     TextView totalViews, totalLikes, totalUnlikes, totalShares, totalComments;
 
     //constructor initializing the values
-    public QuizDataListAdapter(Context context, int resource, List<QuizDataModel> quizDataList, int animationType) {
+    public QuizDataListAdapter(Context context, int resource, List<QuizDataModel> quizDataList) {
         super(context, resource, quizDataList);
         this.context = context;
         this.resource = resource;
         this.quizDataList = quizDataList;
-        this.animationType = animationType;
     }
 
     @Override
@@ -93,12 +91,14 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
         QuizDataModel qData = quizDataList.get(position);
 
         //adding values to the list item
+        quesNoOnReviewModeTextView.setText("Ques: " + String.valueOf(position + 1));
         quizQuestionTextView.setText(qData.quesData.get(Constant.QUESTION));
         optionCheckBox[0].setText(qData.quesData.get(Constant.OPTION_A));
         optionCheckBox[1].setText(qData.quesData.get(Constant.OPTION_B));
         optionCheckBox[2].setText(qData.quesData.get(Constant.OPTION_C));
         optionCheckBox[3].setText(qData.quesData.get(Constant.OPTION_D));
         setOptionCheckBoxChecked(qData.quesData.get(Constant.USER_OPTION));
+
         totalViews.setText(qData.quesData.get(Constant.TOTAL_VIEWS));
         totalLikes.setText(qData.quesData.get(Constant.TOTAL_LIKES));
         totalUnlikes.setText(qData.quesData.get(Constant.TOTAL_UNLIKES));
@@ -257,14 +257,71 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
                 return;
         }
 
+        if(PlayQuizActivity.mode.toLowerCase().equals(Constant.MODE_PRACTICE)) {
+            showCorrectAnswer(userOption, true);
+        }
+
     }
 
-    private void saveUserAnswer(String option) {
+    private void saveUserAnswer(String userOption) {
         int position = getPosition();
+        // Updating quiz data value in the list
         final QuizDataModel qData = PlayQuizActivity.quizDataList.get(position);
         HashMap<String, String> m_li = qData.quesData;
-        m_li.put(Constant.USER_OPTION, option);
+        m_li.put(Constant.USER_OPTION, userOption);
         PlayQuizActivity.quizDataList.set(position, new QuizDataModel(m_li));
+
+        // Updating the status of how much or which question is attempted
+        final Button mButton = PlayQuizActivity.quizQuestionStatusButtonList.get(position);
+        if (userOption == null) {//Question Not attempted
+            PlayQuizActivity.totalAttempted -= 1;
+            mButton.setBackgroundResource(R.drawable.circle_background_3d_gray);
+        }
+        else {// Question attempted
+            PlayQuizActivity.totalAttempted += 1;
+            mButton.setBackgroundResource(R.drawable.circle_background_3d_green);
+        }
+
+        PlayQuizActivity.quizQuestionStatusButtonList.set(position, mButton);
+
+        if(PlayQuizActivity.mode.toLowerCase().equals(Constant.MODE_PRACTICE)) {
+            showCorrectAnswer(userOption, false);
+        }
+    }
+
+    private void showCorrectAnswer(String userOption, boolean isAlreadyShown) {
+
+        int rightAnsBackground = R.drawable.background_style_right_ans;
+        int wrongAnsBackground = R.drawable.background_style_wrong_ans;
+        int position = getPosition();
+        String correctOption = PlayQuizActivity.quizDataList.get(position).quesData.get(Constant.CORRECT_OPTION);
+        correctOption = correctOption.toUpperCase();
+        userOption = userOption.toUpperCase();
+
+        int correctOptionValue = (int) correctOption.charAt(0) - 65;
+        int userOptionValue = (int) userOption.charAt(0) - 65;
+
+        for (int i = 0; i<4; i++ ) {
+            if(i == userOptionValue) {
+                if (i == correctOptionValue) {
+                    optionCheckBox[i].setBackgroundResource(rightAnsBackground);
+                    if (!isAlreadyShown) {
+                        SoundManager sm = new SoundManager(context, R.raw.correct_answer);
+                        sm.playSound();
+                    }
+                }
+                else {
+                    optionCheckBox[correctOptionValue].setBackgroundResource(rightAnsBackground);
+                    optionCheckBox[userOptionValue].setBackgroundResource(wrongAnsBackground);
+                    if (!isAlreadyShown) {
+                        SoundManager sm = new SoundManager(context, R.raw.incorrect_answer);
+                        sm.playSound();
+                    }
+                }
+            }
+
+            optionCheckBox[i].setEnabled(false);
+        }
     }
 
     private void animateLeftToRightEntry(final View childView, View containerView) {
@@ -317,14 +374,17 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
 
     private void initAllComponents(View view) {
 
-        mainQuizScrollView = view.findViewById(R.id.mainQuizScrollView);
-
         quizContainerLayout = view.findViewById(R.id.quiz_container);
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        quesNoTextView = view.findViewById(R.id.ques_no);
-        timerTextView = view.findViewById(R.id.timer_text_view);
+        quesNoOnReviewModeTextView = view.findViewById(R.id.ques_no_on_review_text);
+        if(PlayQuizActivity.mode.toLowerCase().equals(Constant.MODE_REVIEW)) {
+            quesNoOnReviewModeTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            quesNoOnReviewModeTextView.setVisibility(View.GONE);
+        }
         quizQuestionTextView = view.findViewById(R.id.quiz_question);
 
         commentLinearLayout = view.findViewById(R.id.comment_linear_layout);
@@ -358,15 +418,5 @@ public class QuizDataListAdapter extends ArrayAdapter<QuizDataModel> {
         commentButton = view.findViewById(R.id.comment_button);
         commentButton.setOnClickListener(onClickListener);
         totalComments = view.findViewById(R.id.total_comments_text);
-
-        // Next question
-        if(animationType == Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT) {
-            animateRightToLeftEntry(quizContainerLayout, quizContainerLayout);
-        }
-
-        // Next question
-        if(animationType == Constant.QUIZ_ANIMATION_TYPE_RIGHT_TO_LEFT) {
-            animateLeftToRightEntry(quizContainerLayout, quizContainerLayout);
-        }
     }
 }

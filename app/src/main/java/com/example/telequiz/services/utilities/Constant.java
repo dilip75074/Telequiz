@@ -100,4 +100,12 @@ public class Constant {
 
     public static final String QUESTIOND_DATA_JSON_READING_ERROR_MESSSAGE_PART_B = "4. Also check if you have entered the correct Google workbook id and worksheet name.\n\n";
     public static final String QUESTIOND_DATA_JSON_READING_ERROR_MESSSAGE_TITLE = "Error Found";
+
+
+    /*
+    * Mode of quiz exam
+    * */
+    public static final String MODE_EXAM = "exam_mode";
+    public static final String MODE_PRACTICE = "practice_mode";
+    public static final String MODE_REVIEW = "review_mode";
 }
