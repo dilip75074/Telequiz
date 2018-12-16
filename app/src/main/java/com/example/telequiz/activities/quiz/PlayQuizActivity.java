@@ -1,5 +1,6 @@
 package com.example.telequiz.activities.quiz;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -29,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.example.telequiz.R;
 import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.OverflowMenuManager;
+import com.example.telequiz.services.ProgressDialogManager;
 import com.example.telequiz.services.utilities.Constant;
 import com.example.telequiz.services.utilities.Message;
 
@@ -49,16 +52,18 @@ public class PlayQuizActivity extends AppCompatActivity {
 
     Context context;
     ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
     //ScrollView mainQuizScrollView;
     CountDownTimer countDownTimer = null;
 
     Button nextButton, previousButton, reviewCloseButton;
 
-    TextView timerTextView, quizQuestionTextView, quesNoTextView;
-    TextView totalAttemptedTextView, totalNotAttemptedTextView;
+    TextView timerTextView, quizQuestionTextView;
+    public static TextView quesNoTextView;
+    TextView totalAttemptedTextView, totalNotAttemptedTextView, totalCorrectAnsTextView, totalIncorrectAnsTextView;
 
-    LinearLayout navButtonContainer;
+    LinearLayout navButtonContainer, correctIncorrectTextContainer;
     ScrollView gridLayoutScroller;
     GridLayout gridLayout;
 
@@ -69,8 +74,7 @@ public class PlayQuizActivity extends AppCompatActivity {
     public static String mode;
     public static List<Button> quizQuestionStatusButtonList;
     public static int quesNo = 1;
-    public static int totalAttempted = 0;
-    private int totalQuestion;
+    public static int totalQuestion;
     QuizDataListAdapter adapter;
 
     @Override
@@ -118,15 +122,14 @@ public class PlayQuizActivity extends AppCompatActivity {
                     scrollToTopButton.setVisibility(View.GONE);
                 }
                 if(mLastFirstVisibleItem<firstVisibleItem) {
-                    Log.i("DK SCROLLING DOWN","TRUE");
+                   // Log.i("DK SCROLLING DOWN","TRUE");
                 }
                 if(mLastFirstVisibleItem>firstVisibleItem) {
-                    Log.i("DK SCROLLING UP","TRUE");
+                   // Log.i("DK SCROLLING UP","TRUE");
                 }
                 mLastFirstVisibleItem=firstVisibleItem;
             }
         });
-
     }
 
     @Override
@@ -138,7 +141,7 @@ public class PlayQuizActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this)
                 .setTitle("Are you sure you want to exit?")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(context, MainActivity.class);
@@ -163,21 +166,31 @@ public class PlayQuizActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.jump_to_question_menu) {
             onJumpToQuestionMenuSelected();
             return true;
         }
         else  if(id == R.id.change_mode_of_exam_menu) {
             boolean isChecked = item.isChecked();
+            boolean isPracticeMode = mode.toLowerCase().equals(Constant.MODE_PRACTICE);
+            boolean isReviewMode = mode.toLowerCase().equals(Constant.MODE_REVIEW);
+            boolean isExamMode = mode.toLowerCase().equals(Constant.MODE_EXAM);
 
-            if(isChecked)
+            if(isPracticeMode) {
+                item.setChecked(true);
                 mode = Constant.MODE_EXAM;
-            else
+                correctIncorrectTextContainer.setVisibility(View.GONE);
+            }
+            else if(isExamMode) {
+                item.setChecked(false);
                 mode = Constant.MODE_PRACTICE;
+                correctIncorrectTextContainer.setVisibility(View.VISIBLE);
+            }
+            else if (isReviewMode){
+                return super.onOptionsItemSelected(item);
+            }
 
-            item.setChecked(!isChecked);
+            updateQuestionNoStatusUI_Style();
             displayQuestion(quesNo);
         }
 
@@ -185,14 +198,63 @@ public class PlayQuizActivity extends AppCompatActivity {
     }
 
     private void onJumpToQuestionMenuSelected() {
+
         if(gridLayoutScroller.getVisibility() == View.VISIBLE) {
             gridLayoutScroller.setVisibility(View.GONE);
             return;
         }
 
+        boolean isPracticeMode = mode.toLowerCase().equals(Constant.MODE_PRACTICE);
+        boolean isReviewMode = mode.toLowerCase().equals(Constant.MODE_REVIEW);
+        //boolean isExamMode = mode.toLowerCase().equals(Constant.MODE_EXAM);
+
+        if(isPracticeMode || isReviewMode) {
+            correctIncorrectTextContainer.setVisibility(View.VISIBLE);
+        }
+        else {
+            correctIncorrectTextContainer.setVisibility(View.GONE);
+        }
+        updateQuestionNoStatusUI_Style();
         gridLayoutScroller.setVisibility(View.VISIBLE);
+    }
+
+    private void updateQuestionNoStatusUI_Style() {
+        boolean isPracticeMode = mode.toLowerCase().equals(Constant.MODE_PRACTICE);
+        boolean isReviewMode = mode.toLowerCase().equals(Constant.MODE_REVIEW);
+
+        int totalAttempted = 0;
+        int totalNotAttempted = 0;
+        int totalCorrect = 0;
+        int totalIncorrect = 0;
+
+        for (int i = 0; i < totalQuestion; i++) {
+            final Button mButton = quizQuestionStatusButtonList.get(i);
+            String userOption = quizDataList.get(i).quesData.get(Constant.USER_OPTION);
+            userOption = (userOption == null) ? "E" : userOption.toUpperCase();
+            String correctOption = quizDataList.get(i).quesData.get(Constant.CORRECT_OPTION).toUpperCase();
+
+            if(userOption.equals("E")){
+                totalNotAttempted += 1;
+                mButton.setBackgroundResource(R.drawable.circle_background_3d_gray);
+            }
+            else if(!userOption.equals(correctOption) && (isPracticeMode || isReviewMode)) {
+                totalIncorrect += 1;
+                mButton.setBackgroundResource(R.drawable.circle_background_3d_green_red);
+            }
+            else {
+                mButton.setBackgroundResource(R.drawable.circle_background_3d_green);
+            }
+            quizQuestionStatusButtonList.set(i, mButton);
+        }
+
+        totalAttempted = totalQuestion - totalNotAttempted;
+        totalCorrect= totalAttempted - totalIncorrect;
+
         totalAttemptedTextView.setText(String.valueOf(totalAttempted));
-        totalNotAttemptedTextView.setText(String.valueOf(totalQuestion - totalAttempted));
+        totalNotAttemptedTextView.setText(String.valueOf(totalNotAttempted));
+
+        totalCorrectAnsTextView.setText(String.valueOf(totalCorrect));
+        totalIncorrectAnsTextView.setText(String.valueOf(totalIncorrect));
     }
 
     private void jumpToQuestionNo(int buttonId) {
@@ -323,21 +385,53 @@ public class PlayQuizActivity extends AppCompatActivity {
     }
 
     private void onFinishButtonClick() {
-        reviewAllQuestions();
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure you want to submit?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final ProgressDialogManager pd = new ProgressDialogManager(context);
+                        pd.showProgressDialod("Processing", "Please wait...");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                reviewAllQuestions();
+                                pd.hideProgressDialod();
+                            }
+                        }, 3000);   //3 seconds
+                    }
+                })
+
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void onReviewCloseButtonClick() {
-        Intent intent = new Intent(context, MainActivity.class);
-        startActivity(intent);
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure you want to close?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void fetchQuestions(String _url) {
-        ConnectionManager.volleyStringRequest(this, true, null, _url, new VolleyResponse() {
+
+        final ProgressDialogManager pd = new ProgressDialogManager(context);
+        pd.showProgressDialod("Loading", "Please wait...");
+        ConnectionManager.volleyStringRequest(this, false, null, _url, new VolleyResponse() {
             @Override
             public void onResponse(String response) {
                 /**
                  * Handle Response
                  */
+                pd.hideProgressDialod();
                 try {
                     setCustomListViewAdapter(response);
                 } catch (JSONException e) {
@@ -351,6 +445,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                 /**
                  * handle Volley Error
                  */
+                pd.hideProgressDialod();
                 Message.message(context, "Couldn't connect to Server");
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
@@ -363,6 +458,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                  * True if internet is connected otherwise false
                  */
                 if(!connected) {
+                    pd.hideProgressDialod();
                     Message.message(context, "Couldn't connect to Internet");
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
@@ -423,7 +519,7 @@ public class PlayQuizActivity extends AppCompatActivity {
     }
 
     private void reviewAllQuestions() {
-        //quesNo = 1;
+
         mode = Constant.MODE_REVIEW;
         previousButton.setVisibility(View.GONE);
         nextButton.setVisibility(View.GONE);
@@ -504,8 +600,15 @@ public class PlayQuizActivity extends AppCompatActivity {
         quizQuestionTextView = findViewById(R.id.quiz_question);
 
         totalAttemptedTextView = findViewById(R.id.total_attmpted_text);
-        totalAttempted = 0;
+//        totalAttempted = 0;
+
         totalNotAttemptedTextView = findViewById(R.id.total_not_attmpted_text);
+
+        totalCorrectAnsTextView = findViewById(R.id.total_correct_text);
+//        totalCorrect = 0;
+
+        totalIncorrectAnsTextView = findViewById(R.id.total_incorrect_text);
+        correctIncorrectTextContainer = findViewById(R.id.correct_incorrect_text_container);
 
         quizQuestionListView = findViewById(R.id.quiz_question_list);
         previousButton = findViewById(R.id.button_previous);

@@ -45,17 +45,12 @@
             android:id="@+id/jump_to_question_menu"
             android:orderInCategory="104"
             android:title="Go"
-            android:icon="@drawable/icon_jump_to_question_white"
-            app:showAsAction="always" />
-        <item
-            android:id="@+id/quiz_information_menu"
-            android:orderInCategory="105"
-            android:title="Go"
             android:icon="@drawable/icon_information_buton_white"
             app:showAsAction="always" />
+
         <item
             android:id="@+id/change_mode_of_exam_menu"
-            android:orderInCategory="106"
+            android:orderInCategory="105"
             android:title="Exam Mode"
             android:checkable="true"
             android:checked="false"/>
