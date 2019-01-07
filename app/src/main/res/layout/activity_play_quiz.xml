@@ -29,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="Quiz Introduction"
                 android:padding="10dp"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -67,6 +68,28 @@
             </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/quiz_intro_scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/backgroundcolor"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/navigation_button_container"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 
     <ScrollView
         android:id="@+id/question_no_container_scrollbar"
@@ -244,6 +267,57 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/quiz_start_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:elevation="3dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+            <RadioGroup
+                android:id="@+id/quiz_mode_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp">
+                <RadioButton
+                    android:id="@+id/practice_mode_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Practice Mode"
+                    android:layout_weight="1"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/exam_mode_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exam Mode"
+                    android:layout_weight="1"/>
+            </RadioGroup>
+        <Button
+            android:id="@+id/quiz_start_button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Start  "
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/darkblue"
+            android:drawableRight="@drawable/icon_play_circle_white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
+
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/navigation_button_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -295,6 +369,7 @@
             android:text="Next"
             android:textColor="#ffffff"
             android:textSize="20sp" />
+
     </LinearLayout>
 
     <!--Scroll to top button-->

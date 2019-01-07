@@ -10,6 +10,14 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/icon_notifications_white"
+        android:orderInCategory="100"
+        android:title="Notifications"
+        app:actionLayout="@layout/app_notifications_action_item_layout"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/icon_setting"
         android:orderInCategory="101"
@@ -40,19 +48,12 @@
     <!--Play quiz Activity-->
     <group
         android:id="@+id/play_quiz_menu_group">
-
         <item
             android:id="@+id/jump_to_question_menu"
             android:orderInCategory="104"
             android:title="Go"
             android:icon="@drawable/icon_information_buton_white"
-            app:showAsAction="always" />
-
-        <item
-            android:id="@+id/change_mode_of_exam_menu"
-            android:orderInCategory="105"
-            android:title="Exam Mode"
-            android:checkable="true"
-            android:checked="false"/>
+            app:showAsAction="always"
+            android:visible="false"/>
     </group>
 </menu>

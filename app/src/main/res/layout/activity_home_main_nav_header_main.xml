@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
    <RelativeLayout
@@ -27,18 +28,18 @@
 
               <de.hdodenhof.circleimageview.CircleImageView
                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                  android:id="@+id/profile_image"
+                  android:id="@+id/profile_images"
                   android:layout_width="75dp"
                   android:layout_height="75dp"
-                  android:src="@drawable/dilip_dp"
-                  app:civ_border_width="2dp"
-                  app:civ_border_color="#FFFFFF" />
+                  android:src="@drawable/default_profile_pic"
+                  app:civ_border_color="#FFFFFF"
+                  app:civ_border_width="2dp" />
               <TextView
                   android:id="@+id/nav_header_logged_in_user_name"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:paddingTop="@dimen/nav_header_vertical_spacing"
-                  android:text="Dilip Kumar"
+                  android:text="Telequiz"
                   android:textColor="@android:color/background_light"
                   android:ellipsize="end"
                   android:textSize="15sp"
@@ -49,7 +50,7 @@
                   android:id="@+id/nav_header_logged_in_user_email"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="dilip75074@gmail.com" />
+                  android:text="info.telequiz@gmail.com" />
           </LinearLayout>
        </RelativeLayout>
 

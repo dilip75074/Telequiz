@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -57,7 +58,7 @@ public class PlayQuizActivity extends AppCompatActivity {
     //ScrollView mainQuizScrollView;
     CountDownTimer countDownTimer = null;
 
-    Button nextButton, previousButton, reviewCloseButton;
+    Button nextButton, previousButton, reviewCloseButton, quizStartButton;
 
     TextView timerTextView, quizQuestionTextView;
     public static TextView quesNoTextView;
@@ -82,7 +83,6 @@ public class PlayQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         initAllComponents();
-        fetchQuestions("https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?id=1f74jia8lVqijhy_wVAdd5jliv54-oMBJjpAe9MIulfs&sheet=Sheet1");
         /*
          * Next quiz
          * */
@@ -166,38 +166,20 @@ public class PlayQuizActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ScrollView quizIntroContainer = findViewById(R.id.quiz_intro_scrollbar);
+        if(quizIntroContainer.getVisibility() == View.VISIBLE)
+            return super.onOptionsItemSelected(item);
+
         if (id == R.id.jump_to_question_menu) {
             onJumpToQuestionMenuSelected();
             return true;
-        }
-        else  if(id == R.id.change_mode_of_exam_menu) {
-            boolean isChecked = item.isChecked();
-            boolean isPracticeMode = mode.toLowerCase().equals(Constant.MODE_PRACTICE);
-            boolean isReviewMode = mode.toLowerCase().equals(Constant.MODE_REVIEW);
-            boolean isExamMode = mode.toLowerCase().equals(Constant.MODE_EXAM);
-
-            if(isPracticeMode) {
-                item.setChecked(true);
-                mode = Constant.MODE_EXAM;
-                correctIncorrectTextContainer.setVisibility(View.GONE);
-            }
-            else if(isExamMode) {
-                item.setChecked(false);
-                mode = Constant.MODE_PRACTICE;
-                correctIncorrectTextContainer.setVisibility(View.VISIBLE);
-            }
-            else if (isReviewMode){
-                return super.onOptionsItemSelected(item);
-            }
-
-            updateQuestionNoStatusUI_Style();
-            displayQuestion(quesNo);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void onJumpToQuestionMenuSelected() {
+
 
         if(gridLayoutScroller.getVisibility() == View.VISIBLE) {
             gridLayoutScroller.setVisibility(View.GONE);
@@ -349,19 +331,24 @@ public class PlayQuizActivity extends AppCompatActivity {
                  * Previous button and next button click
                  * */
                 case R.id.button_previous:
-                    onPreviousButtonClick();
+                    onPreviousButtonClicked();
                     break;
                 case R.id.button_next:
-                    onNextButtonClick();
+                    onNextButtonClicked();
                     break;
                 case R.id.button_review_close:
                     onReviewCloseButtonClick();
                     break;
+                case R.id.quiz_start_button:
+                    onQuizStartButtonClicked();
+                    break;
+
+
             }
         }
     };
 
-    private void onPreviousButtonClick() {
+    private void onPreviousButtonClicked() {
         if (quesNo > 1) {
             quesNo--;
             nextButton.setText("Next");
@@ -369,7 +356,7 @@ public class PlayQuizActivity extends AppCompatActivity {
         }
     }
 
-    private void onNextButtonClick() {
+    private void onNextButtonClicked() {
         if(nextButton.getText().toString().toUpperCase().equals("FINISH"))
             onFinishButtonClick();
 
@@ -421,8 +408,23 @@ public class PlayQuizActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void fetchQuestions(String _url) {
+    private void onQuizStartButtonClicked() {
+        RadioButton examModeRadioButon = findViewById(R.id.exam_mode_radio_button);
+        //RadioButton practiceModeRadioButon = findViewById(R.id.practice_mode_radio_button);
+        if(examModeRadioButon.isChecked())
+            mode = Constant.MODE_EXAM;
+        else
+            mode = Constant.MODE_PRACTICE;
+        fetchQuestions("https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?id=1f74jia8lVqijhy_wVAdd5jliv54-oMBJjpAe9MIulfs&sheet=Sheet1");
+    }
 
+    private void hideQuizIntroduction() {
+        LinearLayout quizStartButtonContainer = findViewById(R.id.quiz_start_button_container);
+        ScrollView quizIntroductionScrollView = findViewById(R.id.quiz_intro_scrollbar);
+        quizStartButtonContainer.setVisibility(View.GONE);
+        quizIntroductionScrollView.setVisibility(View.GONE);
+    }
+    private void fetchQuestions(String _url) {
         final ProgressDialogManager pd = new ProgressDialogManager(context);
         pd.showProgressDialod("Loading", "Please wait...");
         ConnectionManager.volleyStringRequest(this, false, null, _url, new VolleyResponse() {
@@ -432,6 +434,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                  * Handle Response
                  */
                 pd.hideProgressDialod();
+                hideQuizIntroduction();
                 try {
                     setCustomListViewAdapter(response);
                 } catch (JSONException e) {
@@ -446,6 +449,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                  * handle Volley Error
                  */
                 pd.hideProgressDialod();
+                hideQuizIntroduction();
                 Message.message(context, "Couldn't connect to Server");
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
@@ -459,6 +463,7 @@ public class PlayQuizActivity extends AppCompatActivity {
                  */
                 if(!connected) {
                     pd.hideProgressDialod();
+                    hideQuizIntroduction();
                     Message.message(context, "Couldn't connect to Internet");
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
@@ -622,6 +627,10 @@ public class PlayQuizActivity extends AppCompatActivity {
 
         navButtonContainer = findViewById(R.id.navigation_button_container);
         navButtonContainer.setVisibility(View.GONE);
+
+        quizStartButton = findViewById(R.id.quiz_start_button);
+        quizStartButton.setOnClickListener(onClickListener);
+
 
         scrollToTopButton = findViewById(R.id.button_scroll_to_top);
 

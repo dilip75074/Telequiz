@@ -5,16 +5,13 @@ import java.util.Map;
 
 public class Constant {
     private Map<String, Integer> status_codes = new HashMap<>();
-    public static String BASE_URL = "http://localhost:9090/telequiz/";
+    public static String BASE_URL = "https://revisionclasses.000webhostapp.com/";
     public static String APP_NAME = "Telequiz";
-
 
     /*
      * Base url to fetch question from the google sheet
      * */
     public static String GOOGLE_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbzGvKKUIaqsMuCj7-A2YRhR-f7GZjl4kSxSN1YyLkS01_CfiyE/exec?";
-
-
     /*
      *User login and logout related session keys:-
      **/

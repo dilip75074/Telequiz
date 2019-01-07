@@ -1,19 +1,18 @@
 package com.example.telequiz.services;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.design.widget.NavigationView;
-import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.telequiz.R;
-import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.activities.account.LoginActivity;
+import com.example.telequiz.activities.home.MainActivity;
 import com.example.telequiz.services.utilities.Constant;
 import com.example.telequiz.services.utilities.Message;
 
@@ -85,7 +84,7 @@ public class SessionManager {
         // commit changes
         editor.commit();
         emailEditor.commit();
-        Message.message(context, "Successfully Logged in");
+        Message.message(context, "Successfully logged in");
     }
 
     /**
@@ -148,7 +147,7 @@ public class SessionManager {
 
         // Staring Login Activity
         context.startActivity(i);
-        Message.message(context, "Successfully Logged Out");
+        Message.message(context, "Successfully logged Out");
     }
 
     /**
